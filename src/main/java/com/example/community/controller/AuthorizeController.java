@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class AuthorizeController {
 
-    //类GitHubProvider需要先添加@Component注解
+    //类GitHubProvider先添加@Component注解
     @Autowired
     private GitHubProvider gitHubProvider;
 
