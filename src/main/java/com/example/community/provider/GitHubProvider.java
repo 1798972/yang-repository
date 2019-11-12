@@ -31,7 +31,7 @@ public class GitHubProvider {  //得到用户token
         return null;
     }
 
-    public GitHubUser getUser(String accessToken){  //得到对应的github用户
+    public GitHubUser getUser(String accessToken){  //根据token得到对应的github用户
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url("https://api.github.com/user?access_token="+accessToken)  //这个网址不要写错了

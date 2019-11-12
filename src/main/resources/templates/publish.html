@@ -28,10 +28,10 @@
         </form>
         <ul class="nav navbar-nav navbar-right">
             <li class="dropdown" th:if="${session.user != null}">
-                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                    aria-haspopup="true" aria-expanded="false" th:text="${session.user.getName()}">
-                       <!--<span class="caret" ></span>-->
-                    </a>
+                    <!--<span class="caret" ></span>-->
+                </a>
                 <ul class="dropdown-menu">
                     <li><a href="/publish">发布</a></li>
                     <li><a href="#">个人中心</a></li>
@@ -50,29 +50,43 @@
 <div class="container-fluid main"  >
     <div class="row"> <!--分成12份 最开始是9:3的宽度 后面会变垂直排列一样宽度-->
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12" >
-            <h3><span class="glyphicon glyphicon-th-list">文章列表</span></h3>
+            <h2><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>发起</h2>
             <hr>
-            <!--循环文章列表 得到每一个文章-->
-            <div class="media" th:each="questionDTO : ${questionDtoList}">
-                <div class="media-left">
-                    <a href="#">
-                        <img class="media-object img-rounded avatar-icon"
-                             th:src="${questionDTO.user.avatarUrl}">
-                    </a>
+
+            <form action="/publish" method="post"> <!--文章信息报错后不能回显？？？？-->
+                <div class="form-group">
+                    <label for="title">问题标题(简单扼要):</label>
+                    <input type="text" class="form-control" id="title" name="title" th:value="${title}" placeholder="输入问题标题...">
                 </div>
-                <div class="media-body">
-                  <h4 class="media-heading" th:text="${questionDTO.title}"></h4>
-                     <span th:text="${questionDTO.description}"></span><br>
-                    <span class="text">
-                        <span th:text="${questionDTO.commentCount}"></span>回复/
-                        <span th:text="${questionDTO.viewCount}"></span>浏览/
-                        <span th:text="${#dates.format(questionDTO.gmtCreate,'yyyy-MM-dd HH:mm')}"></span>
-                    </span>
+                <div class="form-group">
+                    <label for="description" >问题补充:</label>
+                    <textarea class="form-control" name="description" id="description" cols="30" rows="10" th:text="${description}">\
+                    </textarea>
                 </div>
-            </div>
+                <div class="form-group">
+                    <label for="tag" >添加标签:</label>
+                    <input class="form-control" name="tag" id="tag" th:value="${tag}" placeholder="输入标签，以,号隔开。">
+                </div>
+                <!--显示错误以及按钮划分为一个区域-->
+                <div class="container-fluid main" >
+                    <div class="row">
+                    <!--错误信息的提示-->
+                        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                            <div class=" col-lg-12 col-md-12 col-sm-12 col-xs-12 alert alert-danger"
+                                 th:if="${error}!=null" th:text="${error}">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                            <button type="submit" class="btn btn-success btn-publish">
+                                发布
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" >
-            <h3>热门话题</h3>
+            <h3>问题发起指南</h3>
             <ul>
                 <li>第1句话</li>
                 <li>第2句话</li>
