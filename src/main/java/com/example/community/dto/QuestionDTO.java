@@ -15,5 +15,5 @@ public class QuestionDTO {
     private Integer viewCount;
     private Integer commentCount;
     private Integer likeCount;
-    private User user;
+    private User user;  //多包含了一个user对象
 }
