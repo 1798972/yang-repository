@@ -1,26 +1,24 @@
 package com.example.community.controller;
 
+import com.example.community.dto.QuestionDTO;
 import com.example.community.mapper.QuestionMapper;
-import com.example.community.mapper.UserMapper;
 import com.example.community.model.Question;
 import com.example.community.model.User;
+import com.example.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class PublishController {
 
     @Autowired
-    QuestionMapper questionMapper;
-    @Autowired
-    UserMapper userMapper;
+    QuestionService questionService;
 
     @GetMapping("/publish")  //get方式发送的publish请求
     public String publish(){
@@ -28,14 +26,15 @@ public class PublishController {
     }
 
 
-    // @RequestParam中的value对应的标签的name
-    // 用于将请求中的参数 绑定到方法的形参上
+    //<input type="hidden" name="questionId" th:value="${questionId}">
+    // @RequestParam中的value值对应的标签的name
     // 单变量时可以简写 eg:@RequestParam("str")String yang 就是将请求中name为str的参数映射到形参yang上面
     @PostMapping("/publish")
     public String doPublish(
-            @RequestParam(value = "title")String title,
-            @RequestParam("description")String des,  //将控件name为description的参数映射到方法的形参上
-            @RequestParam(value = "tag")String tag,
+            @RequestParam(value = "title",required = false)String title,
+            @RequestParam(value = "description",required = false)String des,  //将控件name为description的参数映射到方法的形参上
+            @RequestParam(value = "tag",required = false)String tag,
+            @RequestParam(value = "questionId",required = false)Integer questionId,
             HttpServletRequest request,
             Model model
     ){
@@ -43,8 +42,6 @@ public class PublishController {
         model.addAttribute("title",title);
         model.addAttribute("description",des);
         model.addAttribute("tag",tag);
-
-        System.out.println("文章信息:"+title+"--"+des+"--"+tag);
 
         if(title == null || title.equals("")){
             model.addAttribute("error","标题不能为空！ ");
@@ -59,21 +56,9 @@ public class PublishController {
              model.addAttribute("error","标签不能为空！");
             return "publish";
         }
-        User user = null;
-        //得到user
-        Cookie[] cookies = request.getCookies();
-        if (cookies!=null){
-            for (Cookie cookie : cookies) {
-                if("token".equals(cookie.getName())){
-                    String token = cookie.getValue();
-                    user = userMapper.findByToken(token);
-                    if (user != null){
-                        request.getSession().setAttribute("user",user);
-                    }
-                    break;
-                }
-            }
-        }
+
+        User user = (User)request.getSession().getAttribute("user");
+
         if(user == null){
             model.addAttribute("error","用户未登录！");
             return "publish";
@@ -85,7 +70,25 @@ public class PublishController {
         question.setCreator(user.getId());
         question.setGmtCreate(System.currentTimeMillis());
         question.setGmtModified(question.getGmtCreate());
-        questionMapper.createQuestion(question);
+        question.setId(questionId);
+        questionService.createOrUpdateQuestion(question);
+//        questionMapper.createQuestion(question);
         return "redirect:/";
+    }
+
+    //重新编辑问题信息
+    @GetMapping("/publish/{questionId}")
+    public String edit(@PathVariable("questionId")Integer questionId,
+                       Model model){
+
+        QuestionDTO questionDTO = questionService.findById(questionId);
+        //model中添加三个键  这样才能回显啊
+        model.addAttribute("title",questionDTO.getTitle());
+        model.addAttribute("description",questionDTO.getDescription());
+        model.addAttribute("tag",questionDTO.getTag());
+
+        //添加一个id用于验证是否已经存question
+        model.addAttribute("questionId",questionDTO.getId());
+        return "publish";
     }
 }

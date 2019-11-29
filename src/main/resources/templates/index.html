@@ -11,50 +11,15 @@
 </head>
 
 <body>
-<!--<nav class="col-lg-9 col-md-12 col-sm-12 col-xs-12" th:include="index :: header"></nav>-->
-<nav class="navbar navbar-default" ><!--th:fragment="header"-->
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">社区</span>
-            </button>
-            <a class="navbar-brand" href="#">社区</a>
-        </div>
-        <form class="navbar-form navbar-left">
-            <div class="form-group">
-                <input type="text" class="form-control" placeholder="搜索问题">
-            </div>
-            <button type="submit" class="btn btn-default">搜索</button>
-        </form>
-        <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown" th:if="${session.user != null}">
-                   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
-                   aria-haspopup="true" aria-expanded="false">
-                       <span th:text="${session.user.getName()}"></span>
-                       <span class="caret" ></span>
-                    </a>
-                <ul class="dropdown-menu">
-                    <li><a href="/publish">发布</a></li>
-                    <li><a href="#">个人中心</a></li>
-                    <li><a href="#">消息列表</a></li>
-                    <li><a href="#">退出登录</a></li>
-                </ul>
-            </li>
-            <li th:if="${session.user == null}">
-                <a href="https://github.com/login/oauth/authorize?client_id=bb4fec2d66add24b4c31&redirect_uri=http://localhost:8089/callback&scope=user&state=1">登录</a>
-            </li>
-        </ul>
-
-    </div>
-    </div>
-</nav>
+<div th:insert="navigation :: nav"></div> <!--fragment的引用-->
+<!--问题列表显示-->
 <div class="container-fluid main"  >
     <div class="row"> <!--分成12份 最开始是9:3的宽度 后面会变垂直排列一样宽度-->
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12" >
             <h3><span class="glyphicon glyphicon-th-list">文章列表</span></h3>
             <hr>
             <!--循环文章列表 得到每一个文章-->
-            <div class="media" th:each="questionDTO : ${pageInfo.questions}">
+            <div class="media"  th:if="${pageInfo.questions != null}" th:each="questionDTO : ${pageInfo.questions}">
                 <div class="media-left">
                     <a href="#">
                         <img class="media-object img-rounded avatar-icon"
@@ -62,7 +27,10 @@
                     </a>
                 </div>
                 <div class="media-body">
-                  <h4 class="media-heading" th:text="${questionDTO.title}"></h4>
+                    <!--!!!!!!!!!!!!!!!!!!!-->
+                  <h4 class="media-heading">
+                     <!-- th:href="@{'/question/'+${questionDTO.id}}-->
+                      <a th:href="@{/question/{questionId} (questionId=${questionDTO.id})}" th:text="${questionDTO.title}"></a></h4>
                      <span th:text="${questionDTO.description}"></span><br>
                     <span class="text">
                         <span th:text="${questionDTO.commentCount}"></span>回复/
@@ -73,7 +41,7 @@
             </div>
 
             <!--分页显示-->
-            <nav aria-label="Page navigation">
+            <nav aria-label="Page navigation" th:if="${pageInfo.questions != null}">
                 <ul class="pagination">
                     <!--第一页-->
                     <li th:if="${pageInfo.showFirstPage}">
@@ -83,7 +51,7 @@
                     </li>
                     <!--上一页-->
                     <li th:if="${pageInfo.showPrePage}">
-                        <a th:href="@{/(page=${pageInfo.nowPage-1})}" aria-label="Previous">
+                        <a th:href="@{/(page=${(pageInfo.nowPage)-1})}" aria-label="Previous">
                             <span aria-hidden="true">&lt;</span>
                         </a>
                     </li>

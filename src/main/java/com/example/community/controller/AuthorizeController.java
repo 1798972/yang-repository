@@ -5,6 +5,7 @@ import com.example.community.dto.GitHubUser;
 import com.example.community.mapper.UserMapper;
 import com.example.community.model.User;
 import com.example.community.provider.GitHubProvider;
+import com.example.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -23,7 +24,8 @@ public class AuthorizeController {
     private GitHubProvider gitHubProvider;
     @Autowired
     private UserMapper userMapper;
-
+    @Autowired
+    private UserService userService;
     //application.properties文件中的属性值进行注入
     @Value("${github.redirect.uri}")
     private String redirectUri;
@@ -49,20 +51,20 @@ public class AuthorizeController {
         GitHubUser gitHubUser = gitHubProvider.getUser(accessToken);
         if(gitHubUser!=null){
             User user = new User();
-            //登录成功 生成一个token
+
+            //token用于识别用户身份
+            //1.数据库查询到accountId 如果登录的用户accountId已经存在 说明已经登录过了
+                //更新他的token
+            //2.否则是第一次登录 做插入操作
             String token = UUID.randomUUID().toString();
-            //将token等信息存入user
             user.setToken(token);
-            //Long-->String
+            //登录github后获取的用户的accountId是唯一的
             user.setAccountId(String.valueOf(gitHubUser.getId()));
-//            user.setAccountId(gitHubUser.getId()+""); //性能差点
             user.setName(gitHubUser.getName());
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified(user.getGmtCreate());
             user.setAvatarUrl(gitHubUser.getAvatarUrl());
-            //将user存入数据库
-            userMapper.insert(user);
-            //添加借助token生成一个cookie
+            //得到用户 判断用户是否存在
+            userService.insertOrUpdate(user);
+
             response.addCookie(new Cookie("token",token));
             return "redirect:/";
         }else {

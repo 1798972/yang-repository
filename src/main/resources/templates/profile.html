@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${sectionName}"></title>
+    <script src="/js/jquery-3.4.1.min.js" type="text/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/publish.css">
+    <link rel="stylesheet" href="/css/profile.css">
+
+</head>
+
+<body>
+<div th:insert="navigation :: nav"></div> <!--fragment的引用-->
+<!--问题列表显示-->
+<div class="container-fluid main profile"  >
+    <div class="row"> <!--分成12份 最开始是9:3的宽度 后面会变垂直排列一样宽度-->
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12" >
+            <h3><span th:text="${sectionName}"></span></h3>
+            <hr>
+            <!--循环文章列表 得到每一个文章-->
+            <div class="media"  th:if="${userPageinfo.questions != null}" th:each="questionDTO : ${userPageinfo.questions}">
+                <div class="media-left">
+                    <a href="#">
+                        <img class="media-object img-rounded avatar-icon"
+                             th:src="${questionDTO.user.avatarUrl}">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading">
+                        <a th:href="@{/question/{questionId} (questionId=${questionDTO.id})}" th:text="${questionDTO.title}"></a>
+                    </h4>
+                    <span th:text="${questionDTO.description}"></span><br>
+                    <span class="text">
+                        <span th:text="${questionDTO.commentCount}"></span>回复/
+                        <span th:text="${questionDTO.viewCount}"></span>浏览/
+                        <span th:text="${#dates.format(questionDTO.gmtCreate,'yyyy-MM-dd HH:mm')}"></span>
+                    </span>
+                </div>
+            </div>
+
+            <!--分页显示-->
+            <div th:if="${userPageinfo.questions.isEmpty()}==true" th:text="您的问题列表为空，快去发布问题吧！"></div>
+            <nav aria-label="Page navigation" th:if="${userPageinfo.questions.isEmpty()}!=true">
+                <ul class="pagination">
+                    <!--第一页-->
+                    <li th:if="${userPageinfo.showFirstPage}">
+                        <a th:href="@{'/profile/'+${section}(page=${1})}" aria-label="Previous">
+                            <span aria-hidden="true">&lt;&lt;</span>
+                        </a>
+                    </li>
+                    <!--上一页-->
+                    <li th:if="${userPageinfo.showPrePage}">
+                        <!--为啥减法就不行？-->
+                        <!--<a th:href="@{'/profile/'+${section}(page=${userPageinfo.getNowPage()-1})}" aria-label="Previous">-->
+                        <a th:href="@{'/profile/'+${section}(page=${(userPageinfo.nowPage)-1})}" aria-label="Previous">
+                            <span aria-hidden="true">&lt;</span>
+                        </a>
+                    </li>
+                    <!--当前页-->
+                    <li th:class="${userPageinfo.nowPage==page}?'active':''" th:each="page : ${userPageinfo.hasPages}" >
+                        <a th:href="@{'/profile/'+${section}(page=${page})}" th:text="${page}"></a>
+                    </li>
+                    <!--下一页-->
+                    <li th:if="${userPageinfo.showNextPage}">
+                        <a th:href="@{'/profile/'+${section}(page=${userPageinfo.nowPage+1})}" aria-label="Next">
+                            <span aria-hidden="true">&gt;</span>
+                        </a>
+                    </li>
+                    <!--最后一页-->
+                    <li th:if="${userPageinfo.showEndpage}">
+                        <a th:href="@{'/profile/'+${section}(page=${userPageinfo.totalPage})}" aria-label="Previous">
+                            <span aria-hidden="true">&gt;&gt;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <!--右侧的选择便签栏-->
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" >
+            <div class="list-group section">
+                <a href="/profile/questions" th:class="${section=='questions'} ? 'list-group-item active' : 'list-group-item' ">我的问题</span></a>
+                <a href="/profile/replies" th:class="${section=='replies'} ? 'list-group-item active' : 'list-group-item' ">最新回复<span class="badge">14</span></a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

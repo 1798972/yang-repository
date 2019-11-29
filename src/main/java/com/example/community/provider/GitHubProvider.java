@@ -21,7 +21,7 @@ public class GitHubProvider {  //得到用户token
         try {
             Response response = client.newCall(request).execute();
             String string = response.body().string();
-            System.out.println(string);
+//            System.out.println(string);
             String token =  string.split("&")[0].split("=")[1];
             System.out.println("解析出token:"+token);
             return token;
@@ -39,7 +39,7 @@ public class GitHubProvider {  //得到用户token
         try {
             Response response = client.newCall(request).execute();
             String string = response.body().string();
-            System.out.println(string);
+//            System.out.println(string);
             //string json格式解析成gitHubUser对象
             GitHubUser gitHubUser = JSON.parseObject(string,GitHubUser.class);
             return gitHubUser;
