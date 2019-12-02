@@ -29,5 +29,6 @@
 -vim src/main/resources/application-production.properties
 进入后按a编辑 esc两次后:wq退出并保存
 -mvn package
-运行
--java -jar -Dspring.profiles.active=production target/community-0.0.1-SNAPSHOT.jar
+运行 ctrl+c 结束当前进程 nohup
+当前目录下会生成一个nohup.out文件，控制台输入的东西会会被转移到这个文件中。最后通过exit退出终端窗口。
+-nohup java -jar -Dspring.profiles.active=production target/community-0.0.1-SNAPSHOT.jar
