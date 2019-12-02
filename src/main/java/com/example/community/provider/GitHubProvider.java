@@ -23,7 +23,7 @@ public class GitHubProvider {  //得到用户token
             String string = response.body().string();
 //            System.out.println(string);
             String token =  string.split("&")[0].split("=")[1];
-            System.out.println("解析出token:"+token);
+//            System.out.println("解析出token:"+token);
             return token;
         } catch (Exception e) {
             e.printStackTrace();
