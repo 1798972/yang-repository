@@ -42,7 +42,8 @@ public class QuestionService {
 
         //当前页的开始索引 比如第二页就是5*1 从数据库的第五条数据开始
              //select * from questions limit 0,5; //0是起始位置 5是偏移量 这里的0要换成offset呗
-        Integer offset = size*(page-1);
+        //注意页数为0时的判断
+        Integer offset = page<1 ? 0 : size*(page-1);
 
         //查出所有的question
         List<Question> questionList =  questionMapper.getQuestionList(offset,size);
