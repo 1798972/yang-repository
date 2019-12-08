@@ -37,5 +37,5 @@ public interface QuestionMapper {
 
     //6.更新某个问题
     @Update("update questions set title = #{title},description = #{description},gmt_modified = #{gmtModified},tag = #{tag} where id = #{id}")
-    void updateQuestion(Question question);
+    int updateQuestion(Question question);
 }

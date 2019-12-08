@@ -37,7 +37,8 @@
                 </li>
                 <!--为空-->
                 <li th:if="${session.user == null}">
-                    <a href="https://github.com/login/oauth/authorize?client_id=bb4fec2d66add24b4c31&redirect_uri=http:localhost:8089/callback&scope=user&state=1">登录</a>
+                    <!--注意回调地址http没有s-->
+                    <a href="https://github.com/login/oauth/authorize?client_id=f0b690e1af8e644032f9&http://localhost:8089/callback&scope=user&state=1">登录</a>
                 </li>
             </ul>
 

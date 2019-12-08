@@ -2,6 +2,8 @@ package com.example.community.service;
 
 import com.example.community.dto.PageInfoDTO;
 import com.example.community.dto.QuestionDTO;
+import com.example.community.exception.CustomizeErrorCode;
+import com.example.community.exception.CustomizeException;
 import com.example.community.mapper.QuestionMapper;
 import com.example.community.mapper.UserMapper;
 import com.example.community.model.Question;
@@ -103,6 +105,11 @@ public class QuestionService {
     //3某一个问题的id
     public QuestionDTO findById(Integer questionId) {
         Question question = questionMapper.findById(questionId);
+        if (question == null){
+            //希望传入的是一个CustomizeException实例
+            //传递的时候给了CustomizeErrorCode.QUESTION_NOT_FOUND这个枚举值
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         QuestionDTO questionDTO = new QuestionDTO();
         //把question复制到questionDTO里面
         BeanUtils.copyProperties(question,questionDTO);
@@ -119,7 +126,11 @@ public class QuestionService {
             questionMapper.createQuestion(question);
         }else{
             question.setGmtModified(System.currentTimeMillis());
-            questionMapper.updateQuestion(question);
+            int update = questionMapper.updateQuestion(question);
+            if (update !=1){
+                //没有更新
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
         }
     }
 }

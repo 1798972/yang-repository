@@ -39,6 +39,8 @@ public class AuthorizeController {
                            @RequestParam(name = "state") String state,
                            HttpServletResponse response){
 
+        //发送请求之后回传了一个地址:
+        //  https://localhost:8089/callback?code=ec043f38116846104634&state=1
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
 
         accessTokenDTO.setCode(code);
