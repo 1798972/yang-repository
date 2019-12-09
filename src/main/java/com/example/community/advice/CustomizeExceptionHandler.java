@@ -21,9 +21,6 @@ public class CustomizeExceptionHandler {
     ModelAndView handle(HttpServletRequest request, Throwable e, Model model){
 
         if (e instanceof CustomizeException){
-            //e:  CustomizeException extends RuntimeException
-            //System.out.println(e.toString());
-            //com.example.community.exception.CustomizeException
             System.out.println(e.getMessage());
             model.addAttribute("message",e.getMessage());
         }else {

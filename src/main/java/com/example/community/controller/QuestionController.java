@@ -24,6 +24,8 @@ public class QuestionController {
                          Model model){
         //1.得到文问题id problem_id
         //2.根据问题id查找得到问题数据
+            //在查看问题之前 让阅读数加1
+        questionService.increaseViewCount(questionId);
         QuestionDTO questionDTO = questionService.findById(questionId);
             model.addAttribute("question",questionDTO);
 
