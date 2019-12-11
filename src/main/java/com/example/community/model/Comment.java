@@ -13,7 +13,7 @@ public class Comment {
     private Long parentId;
     private Integer type;
     private Integer commentator;
-    private String context;
+    private String content;
     private Integer likeCount;
     private Long gmtCreate;
     private Long gmtModified;

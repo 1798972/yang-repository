@@ -10,7 +10,9 @@ public interface ICustomizeErrorCode {
     //接口中的变量public static final
     //final 最终的 不可修改
 
-    public String getMessage();
+    String getMessage();
+
+    Integer getCode();
 
 }
 

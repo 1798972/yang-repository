@@ -1,5 +1,7 @@
 package com.example.community.service;
 
+import com.example.community.exception.CustomizeErrorCode;
+import com.example.community.exception.CustomizeException;
 import com.example.community.mapper.CommentMapper;
 import com.example.community.model.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,9 @@ public class CommentService {
     private CommentMapper commentMapper;
 
     public void insert(Comment comment) {
+        if (comment.getParentId() == null){
+            throw new CustomizeException(CustomizeErrorCode.TARGET_PATH_NOT_FOUND);
+        }
         commentMapper.insert(comment);
     }
 }

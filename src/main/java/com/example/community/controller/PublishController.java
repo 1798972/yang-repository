@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -21,7 +22,14 @@ public class PublishController {
     QuestionService questionService;
 
     @GetMapping("/publish")  //get方式发送的publish请求
-    public String publish(){
+    public String publish(HttpServletRequest request,
+                          Model model){
+
+        User user = (User)request.getSession().getAttribute("user");
+        if(user == null){
+            model.addAttribute("error","用户未登录！请先登录！");
+            return "publish";
+        }
         return "publish";
     }
 
@@ -38,6 +46,14 @@ public class PublishController {
             HttpServletRequest request,
             Model model
     ){
+
+        User user = (User)request.getSession().getAttribute("user");
+
+        if(user == null){
+            model.addAttribute("error","用户未登录！不能发布问题！");
+            return "publish";
+        }
+
         //model中添加三个键  这样才能回显啊
         model.addAttribute("title",title);
         model.addAttribute("description",des);
@@ -57,12 +73,6 @@ public class PublishController {
             return "publish";
         }
 
-        User user = (User)request.getSession().getAttribute("user");
-
-        if(user == null){
-            model.addAttribute("error","用户未登录！");
-            return "publish";
-        }
         Question question = new Question();
         question.setTitle(title);
         question.setDescription(des);

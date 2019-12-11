@@ -11,6 +11,6 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface CommentMapper {
-    @Insert("insert into comment (id,parent_id,type,commentator,content,like_count,gmt_create,gmt_modified) values (#{id},#{parent_id},#{type},#{commentator},#{content},#{like_count},#{gmtModified},#{avatarUrl})")
+    @Insert("insert into comment (id,parent_id,type,commentator,content,like_count,gmt_create,gmt_modified) values (#{id},#{parentId},#{type},#{commentator},#{content},#{likeCount},#{gmtCreate},#{gmtModified})")
     void insert(Comment comment);
 }

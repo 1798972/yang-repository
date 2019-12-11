@@ -22,7 +22,7 @@ public interface QuestionMapper {
 
     //3.查询某用户的问题
     //方法中@Param("列名") 要指定  方法哪个形参--->数据库哪个列
-    //   1.查询语句里  creator = #{creator} 这里是指明creator的值是在#{creator}这一列
+    //   1.查询语句里  creator = #{creator} 这里是指明creator的值是在#{creator}这一列,model类的属性要跟他对应上。
     //   2.方法的形参中  @Param("creator") int id 说明id映射的是creator这一列
     @Select("select * from questions where creator = #{creator} limit #{offset},#{size}")
     List<Question> myQuestionList(@Param("creator") int id,@Param("offset") Integer offset,@Param("size") Integer size);
