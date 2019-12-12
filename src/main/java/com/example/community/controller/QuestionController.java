@@ -20,7 +20,7 @@ public class QuestionController {
     private QuestionService questionService;
 
     @GetMapping("/question/{questionId}")
-    String questionDetail(@PathVariable("questionId")Integer questionId,
+    String questionDetail(@PathVariable("questionId")Long questionId,
                          Model model){
         //1.得到文问题id problem_id
         //2.根据问题id查找得到问题数据

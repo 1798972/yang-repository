@@ -19,5 +19,8 @@ select * from questions limit 0,5; //0是起始位置 5是偏移量
 2.链接中的地址书写 以跳转最后一页为例
     th:href="@{/(page=${pageInfo.totalPage})}"
 
+3.css样式
+margin外边距
+padding内边距
 
 

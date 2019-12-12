@@ -12,7 +12,7 @@ public class Comment {
     private Long id;
     private Long parentId;
     private Integer type;
-    private Integer commentator;
+    private Long commentator;
     private String content;
     private Integer likeCount;
     private Long gmtCreate;

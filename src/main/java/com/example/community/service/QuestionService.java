@@ -68,7 +68,7 @@ public class QuestionService {
 
 
     //2某用户的问题列表
-    public PageInfoDTO myQuestionList(int id, Integer page, Integer size) {
+    public PageInfoDTO myQuestionList(Long id, Integer page, Integer size) {
         PageInfoDTO userPageInfoDTO = new PageInfoDTO();
         //总条数
         Integer totalCount = questionMapper.selectMyQuestionCounts(id);
@@ -103,7 +103,7 @@ public class QuestionService {
     }
 
     //3某一个问题的id
-    public QuestionDTO findById(Integer questionId) {
+    public QuestionDTO findById(Long questionId) {
         Question question = questionMapper.findById(questionId);
         if (question == null){
             //希望传入的是一个CustomizeException实例
@@ -123,6 +123,9 @@ public class QuestionService {
         if (question.getId() == null){
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
+            question.setViewCount(0);
+            question.setLikeCount(0);
+            question.setCommentCount(0);
             questionMapper.createQuestion(question);
         }else{
             question.setGmtModified(System.currentTimeMillis());
@@ -135,7 +138,7 @@ public class QuestionService {
     }
 
     //增加阅读数
-    public void increaseViewCount(Integer questionId) {
+    public void increaseViewCount(Long questionId) {
         questionMapper.increaseViewCount(questionId);
     }
 }

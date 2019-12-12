@@ -42,7 +42,7 @@ public class PublishController {
             @RequestParam(value = "title",required = false)String title,
             @RequestParam(value = "description",required = false)String des,  //将控件name为description的参数映射到方法的形参上
             @RequestParam(value = "tag",required = false)String tag,
-            @RequestParam(value = "questionId",required = false)Integer questionId,
+            @RequestParam(value = "questionId",required = false)Long questionId,
             HttpServletRequest request,
             Model model
     ){
@@ -88,7 +88,7 @@ public class PublishController {
 
     //重新编辑问题信息
     @GetMapping("/publish/{questionId}")
-    public String edit(@PathVariable("questionId")Integer questionId,
+    public String edit(@PathVariable("questionId")Long questionId,
                        Model model){
 
         QuestionDTO questionDTO = questionService.findById(questionId);
