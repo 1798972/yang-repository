@@ -77,7 +77,7 @@ public class CommentService {
 
         //获取去重复的评论人
         //eg;十条评论 有五条是同一个用户 为了避免重复 所以用不着拿出十个用户
-        //Set的使用 lambad表达式的使用
+        //Set的使用 lambda表达式的使用
         Set<Long> commentator = comments.stream().map(comment -> comment.getCommentator()).collect(Collectors.toSet());
 
             //所有的userId
