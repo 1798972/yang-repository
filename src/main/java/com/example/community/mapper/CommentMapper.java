@@ -3,7 +3,10 @@ package com.example.community.mapper;
 import com.example.community.model.Comment;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 /**
  * @Author: Yiang37
@@ -17,4 +20,7 @@ public interface CommentMapper {
 
     @Select("select * from comment where id = #{id}")
     Comment selectById(Long id);
+
+    @Select("select * from comment where parent_id = #{parentId}")
+    List<Comment> findByQuestionId(@Param("parentId") Long questionId);
 }

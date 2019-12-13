@@ -9,6 +9,15 @@
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="css/publish.css">
 </head>
+<script type="text/javascript">
+    window.onload = function () {
+        var close = window.localStorage.getItem("close");
+        if ("true" == close){
+            window.close();
+            window.localStorage.removeItem("close");
+        }
+    }
+</script>
 
 <body>
 <div th:insert="navigation :: nav"></div> <!--fragment的引用-->

@@ -22,7 +22,17 @@ function post(){
             if (response.code == 200){
                 $("#comment_section").hide();
             }else{
+                //用户未登录时 要先登录
+                if(response.code == 2003){
+                    var accepted = confirm(response.message);
+                    //点击确认 跳转登录
+                    if(accepted){
+                        window.open("https://github.com/login/oauth/authorize?client_id=f0b690e1af8e644032f9&http://localhost:8089/callback&scope=user&state=1");
+                        window.localStorage.setItem("close",true);
+                    }
+                }else {
                 alert("错误码:"+response.code+"，"+response.message)
+                }
             }
         }
     });

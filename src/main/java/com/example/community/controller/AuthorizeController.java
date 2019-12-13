@@ -34,13 +34,13 @@ public class AuthorizeController {
     @Value("${github.client.secret}")
     private String clientSecret;
 
+    //点击登录链接之后会回传一个地址
+    //      https://localhost:8089/callback?code=ec043f38116846104634&state=1
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
                            @RequestParam(name = "state") String state,
                            HttpServletResponse response){
-
-        //发送请求之后回传了一个地址:
-        //  https://localhost:8089/callback?code=ec043f38116846104634&state=1
+        //对回传的地址进行处理
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
 
         accessTokenDTO.setCode(code);
@@ -48,12 +48,12 @@ public class AuthorizeController {
         accessTokenDTO.setRedirect_uri(redirectUri);
         accessTokenDTO.setClient_id(clientId);
         accessTokenDTO.setClient_secret(clientSecret);
-
-        String accessToken = gitHubProvider.getAccessToken(accessTokenDTO);   //得到用户的token
+        //得到用户的token
+        String accessToken = gitHubProvider.getAccessToken(accessTokenDTO);
+        //通过token得到用户
         GitHubUser gitHubUser = gitHubProvider.getUser(accessToken);
         if(gitHubUser!=null){
             User user = new User();
-
             //token用于识别用户身份
             //1.数据库查询到accountId 如果登录的用户accountId已经存在 说明已经登录过了
                 //更新他的token
@@ -70,6 +70,7 @@ public class AuthorizeController {
             response.addCookie(new Cookie("token",token));
             return "redirect:/";
         }else {
+            System.out.println("登录失败！！");
             return "redirect:/";
         }
     }

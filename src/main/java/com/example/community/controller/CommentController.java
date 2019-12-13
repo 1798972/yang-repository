@@ -1,10 +1,8 @@
 package com.example.community.controller;
 
-import com.example.community.dto.CommentDTO;
+import com.example.community.dto.CommentClickDTO;
 import com.example.community.dto.ResultDTO;
 import com.example.community.exception.CustomizeErrorCode;
-import com.example.community.exception.ICustomizeErrorCode;
-import com.example.community.mapper.CommentMapper;
 import com.example.community.model.Comment;
 import com.example.community.model.User;
 import com.example.community.service.CommentService;
@@ -15,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @Author: Yiang37
@@ -31,7 +27,7 @@ public class CommentController {
     //ResponseBody用于对象格式转换
     @ResponseBody
     @RequestMapping("/comment")
-    public Object post(@RequestBody CommentDTO commentDTO,
+    public Object post(@RequestBody CommentClickDTO commentClickDTO,
                        HttpServletRequest request){
         User user = (User)request.getSession().getAttribute("user");
         if (user == null){
@@ -40,9 +36,9 @@ public class CommentController {
 
         Comment comment = new Comment();
 
-        comment.setParentId(commentDTO.getParentId());
-        comment.setType(commentDTO.getType());
-        comment.setContent(commentDTO.getContent());
+        comment.setParentId(commentClickDTO.getParentId());
+        comment.setType(commentClickDTO.getType());
+        comment.setContent(commentClickDTO.getContent());
         comment.setGmtCreate(System.currentTimeMillis());
         comment.setGmtModified(System.currentTimeMillis());
         comment.setCommentator(user.getId());
