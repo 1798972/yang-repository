@@ -14,18 +14,17 @@ public class UserService {
         //根据AccountId查找到的数据库中的dbUser
         User dbUser = userMapper.finfByAccountId(user.getAccountId());
         if(dbUser == null){
-        //1.插入
+        //1.数据库中没有 插入
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             userMapper.insert(user);
         }else {
-        //2.更新
+        //2.数据库中有 更新
             dbUser.setGmtModified(System.currentTimeMillis());
             dbUser.setAvatarUrl(user.getAvatarUrl());
             dbUser.setName(user.getName());
             dbUser.setToken(user.getToken());
-//            System.out.println(user);
-            userMapper.update(user);
+            userMapper.update(dbUser);
         }
     }
 }

@@ -13,7 +13,7 @@ public interface QuestionMapper {
 
 
     //1.查询所有问题
-    @Select("select * from questions limit #{offset},#{size}")
+    @Select("select * from questions order by id desc limit #{offset},#{size}")
     List<Question> getQuestionList(@Param("offset") Integer offset, @Param("size") Integer size);
 
     //2.查询总条数

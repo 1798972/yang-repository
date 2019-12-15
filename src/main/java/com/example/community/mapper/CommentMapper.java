@@ -21,6 +21,7 @@ public interface CommentMapper {
     @Select("select * from comment where id = #{id}")
     Comment selectById(Long id);
 
-    @Select("select * from comment where parent_id = #{parentId}")
+    //按时间倒序查询
+    @Select("select * from comment where parent_id = #{parentId} order by gmt_modified desc")
     List<Comment> findByQuestionId(@Param("parentId") Long questionId);
 }

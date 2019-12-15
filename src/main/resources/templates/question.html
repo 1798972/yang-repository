@@ -26,36 +26,41 @@
                 发布时间：<span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span> |
                 阅读数：<span th:text="${question.viewCount}"></span>
             </span>
-                <hr>
+                <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <!--问题详情-->
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:text="${question.description}">
                 </div>
-                <!--用户操作按钮eg;编辑-->
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                <div>
+                <!--用户操作按钮eg;编辑-->
                 <a class="yang-menu" th:href="@{'/publish/'+${question.id}}">
                     <span class="glyphicon glyphicon-pencil" aria-hidden="true" th:text="编辑"
                           th:if="${ session.user!=null && session.user.id==question.creator}"></span>
                 </a>
+                </div>
             </div>
+
+            <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12" color="#999">
 
             <!--评论显示区域-->
             <h4><span th:text="${question.commentCount}"></span>个回复</h4>
-            <!--遍历显示评论内容-->
 
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="comment_section">
-                <div class="media" th:if="${comments != null}" th:each="comment : ${comments}">
+            <!--遍历显示评论内容-->
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="media comments" th:if="${comments != null}" th:each="comment : ${comments}">
+
+                    <!--左侧头像-->
                     <div class="media-left">
                         <a href="#">
                             <img class="media-object img-rounded avatar-icon"
                                  th:src="${comment.user.avatarUrl}">
                         </a>
                     </div>
-
                     <div class="media-body">
                         <h4 class="media-heading"></h4>
                         <span th:text="${comment.user.name}"></span>
                         <div><p th:text="${comment.content}"></p></div>
-
                         <!--点赞等操作-->
                         <div class="menu">
                             <span class="glyphicon glyphicon-thumbs-up icon" aria-hidden="true"></span>
@@ -67,9 +72,10 @@
                 </div>
             </div>
 
-            <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12" color="#999">
             <!--回复框-->
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="comment_section">
+            <h4><span th:text="提交你的回复"></span></h4>
                 <div class="media">
                     <div class="media-left">
                         <a href="#">

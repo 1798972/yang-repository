@@ -40,6 +40,8 @@ public class AuthorizeController {
     public String callback(@RequestParam(name = "code") String code,
                            @RequestParam(name = "state") String state,
                            HttpServletResponse response){
+
+
         //对回传的地址进行处理
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
 
@@ -50,8 +52,10 @@ public class AuthorizeController {
         accessTokenDTO.setClient_secret(clientSecret);
         //得到用户的token
         String accessToken = gitHubProvider.getAccessToken(accessTokenDTO);
+//        System.out.println("用户token："+accessToken);
         //通过token得到用户
         GitHubUser gitHubUser = gitHubProvider.getUser(accessToken);
+//        System.out.println("github用户:"+gitHubUser);
         if(gitHubUser!=null){
             User user = new User();
             //token用于识别用户身份
@@ -66,8 +70,8 @@ public class AuthorizeController {
             user.setAvatarUrl(gitHubUser.getAvatarUrl());
             //得到用户 判断用户是否存在
             userService.insertOrUpdate(user);
-
             response.addCookie(new Cookie("token",token));
+
             return "redirect:/";
         }else {
             System.out.println("登录失败！！");
