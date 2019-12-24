@@ -141,4 +141,16 @@ public class QuestionService {
     public void increaseViewCount(Long questionId) {
         questionMapper.increaseViewCount(questionId);
     }
+
+    //根据id删除某个问题
+    public void deleteByQuestionId(Long questionId) {
+        //先查找有没有这个问题
+        if((questionMapper.findById(questionId)) == null){
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        } else{
+            //否则问题存在
+            //执行删除操作
+            questionMapper.deleteByQuestionId(questionId);
+        }
+    }
 }

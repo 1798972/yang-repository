@@ -31,7 +31,6 @@ public class ProfileController {
     //      @RequestParam  eg：/profile?id=20
     //区别就在于那个是不是显示的在写 = 号
 
-
     @GetMapping("/profile/{action}")  //动态指定action 确定跳转到哪个标签页面
     public String profile(HttpServletRequest request,
                           Model model,

@@ -44,3 +44,13 @@ function post(){
         }
     });
 }
+
+
+function deletequestion(){
+   var message = confirm("您确定删除该问题吗？")
+    if (message == true){
+        return true;
+    }else {
+        return false;
+    }
+}

@@ -12,9 +12,9 @@
 根目录中创建一个名为App的目录  <br/>
 -mkdir App  <br/>
 -cd App  <br/>
-进入到App目录(git pull拉取代码)<br/>
--git clone https://github.com/1798972/yang-repository.git  <br/>
-查看当前mul <br/>
+进入到App目录<br/>
+-git clone https://github.com/1798972/yang-repository.git (git pull拉取代码) <br/>
+查看当前目录 <br/>
 -pwd  <br/>
 安装maven(它自动安装了java8)  <br/>
 -yum install maven  <br/>

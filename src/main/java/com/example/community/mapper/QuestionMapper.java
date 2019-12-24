@@ -46,4 +46,7 @@ public interface QuestionMapper {
     //8.更新评论数
     @Update("update questions set comment_count = comment_count + 1 where id = #{id}")
     void increaseCommentCounnt(@Param("id") Long parentId);
+
+    @Delete("delete from questions where id = #{id}")
+    void deleteByQuestionId(Long questionId);
 }
