@@ -28,7 +28,7 @@
 编辑新文件  <br/>
 -vim src/main/resources/application-production.properties  <br/>
 进入后按a编辑 esc两次后:wq退出并保存  <br/>
--mvn package  <br/>
+-mvn package (注意要在pom.xml文件的同级目录下运行)<br/>
 运行 ctrl+c 结束当前进程 nohup  <br/>
 当前目录下会生成一个nohup.out文件，控制台输入的东西会会被转移到这个文件中。最后通过exit退出终端窗口。  <br/>
 -nohup java -jar -Dspring.profiles.active=production target/community-0.0.1-SNAPSHOT.jar  <br/>
