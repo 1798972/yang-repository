@@ -28,8 +28,8 @@ public class QQProvider {
                 .build();
         try {
             Response response = client.newCall(request).execute();
-            String string = response.body().string();
-            //access_token=0A75E58421FF7A72A50AECF6C5483689&expires_in=7776000&refresh_token=A9BA2A4FE54DCD51B5E16BADDE5C316E
+            String string =  response.body().string();
+//            access_token=0A75E58421FF7A72A50AECF6C5483689&expires_in=7776000&refresh_token=A9BA2A4FE54DCD51B5E16BADDE5C316E
             String token =  string.split("&")[0].split("=")[1];
             return token;
         } catch (Exception e) {
