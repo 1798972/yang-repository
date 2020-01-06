@@ -8,7 +8,8 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
-public class GitHubProvider {  //得到用户token
+public class GitHubProvider {
+    //1.得到用户token
     public String getAccessToken(AccessTokenDTO accessTokenDTO){
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
@@ -30,7 +31,8 @@ public class GitHubProvider {  //得到用户token
         return null;
     }
 
-    public GitHubUser getUser(String accessToken){  //根据token得到对应的github用户
+    //2.根据token得到对应的github用户
+    public GitHubUser getUser(String accessToken){
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url("https://api.github.com/user?access_token="+accessToken)  //这个网址不要写错了
@@ -38,7 +40,7 @@ public class GitHubProvider {  //得到用户token
         try {
             Response response = client.newCall(request).execute();
             String string = response.body().string();
-//            System.out.println(string);
+            System.out.println(string);
             //string json格式解析成gitHubUser对象
             GitHubUser gitHubUser = JSON.parseObject(string,GitHubUser.class);
             return gitHubUser;

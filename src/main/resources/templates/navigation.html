@@ -34,10 +34,10 @@
                         <li><a href="/logout">退出登录</a></li>
                     </ul>
                 </li>
-                <!--为空-->
+                <!--session的user为空时才显示-->
                 <!--QQ登录-->
                 <li th:if="${session.user == null}">
-                    <a href="#">
+                    <a href="https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=101838917&redirect_uri=http://www.yang37.cn/qqcallback&state=1">
                         <img src="/icon/login_qq.jpg" width="23px" height="23px">
                     </a>
                 </li>
@@ -47,13 +47,14 @@
                       <img src="/icon/login_github.jpg" width="20px" height="20px">
                   </a>
                 </li>
+                <!--普通登录-->
                 <li  th:if="${session.user == null}">
                     <a href="/ordinarylogin">
                        <span th:text="普通登录"></span>
                     </a>
                 </li>
 <!--            <li th:if="${session.user == null}">
-                    &lt;!&ndash;注意回调地址http没有s&ndash;&gt;
+                    &lt;!&ndash;注意回调地址http没有s
                     <a href="https://github.com/login/oauth/authorize?client_id=f0b690e1af8e644032f9&http://localhost:8089/callback&scope=user&state=1">登录</a>
                 </li>-->
             </ul>

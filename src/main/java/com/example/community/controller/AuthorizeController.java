@@ -16,6 +16,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.util.UUID;
 
+
+//解析github用户
 @Controller
 public class AuthorizeController {
 
@@ -26,6 +28,7 @@ public class AuthorizeController {
     private UserMapper userMapper;
     @Autowired
     private UserService userService;
+
     //application.properties文件中的属性值进行注入
     @Value("${github.redirect.uri}")
     private String redirectUri;
