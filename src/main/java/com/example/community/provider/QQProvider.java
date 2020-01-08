@@ -16,7 +16,7 @@ public class QQProvider {
         String appkey = accessTokenDTO.getClient_secret();
         String redirectURI = accessTokenDTO.getRedirect_uri();
         String code = accessTokenDTO.getCode();
-        String asStr ="https://graph.qq.com/oauth2.0/token?grant_type=authorization_code&client_id=" + appid + "&client_secret="+ appkey + "&redirect_uri=" + redirectURI + "&code=" + code;
+        String asStr ="https://graph.qq.com/oauth2.0/token?grant_type=authorization_code&client_id="+appid+"&client_secret="+appkey+"&redirect_uri="+redirectURI+"&code="+code;
 
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
