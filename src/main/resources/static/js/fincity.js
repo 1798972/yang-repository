@@ -93,7 +93,7 @@ function findBy2char(){
  			var resStringList = new Array();
 		//获取的城市简拼
    		var city2char = $("#cityName").val();
-   	//查找得到城市id以及县城名字
+    	//查找得到城市id以及县城名字
 		findCityId(city2char);
 		
 		var i = 1;

@@ -132,6 +132,7 @@
                 //删除键
                 if(e.which == "8"){
                     $("#cityName").val("");
+                    $("#loveImg").hide();
                     $("#helpInfo").html("清空了输入框的内容！");
                     var t =document.getElementById("cityName");
                     t.focus();
@@ -145,6 +146,22 @@
         function startSelect(){
             //先清空表格内容
             $("#myTable").html('');
+            //小杨的彩蛋
+            //获取的城市简拼
+            var city2char = $("#cityName").val();
+            //如果长度大于等于3
+            if (city2char.length>=3){
+                if (city2char.indexOf("sy520") != -1 &&city2char.length== 5) {
+                    $("#helpInfo").html("<html><body><p align=\"center\" style='color: #761c19'>人生路上过客很多<br/>他人向东向西向南向北<br/>而我&nbsp;&nbsp;只向你</p></body></html>");
+                    $("#loveImg").show();
+                    return;
+                }
+                if (city2char.indexOf("520") != -1 ){
+                    $("#helpInfo").html("<html><body><p align=\"center\" style='color:rebeccapurple'>清河流水,野马牛羊。<br/>桐花柳絮,洛阳树根。<br/>尽数美好,皆愿与你共享一生。</p></body></html>");
+                    $("#loveImg").hide();
+                    return;
+                }
+            }
             var resStringList = findBy2char();
             var temp = [];
             //遍历数组显示结果
@@ -162,6 +179,8 @@
             copyText(cityId);
             var info = $("#res1").text().substr(2,3) + "]  的id—>"+cityId;
             $("#helpInfo").html("复制  ["+info+"成功！");
+
+
         }
     </script>
 </head>
@@ -228,8 +247,12 @@
 
 <!--4.按键提示-->
 <div class="alert alert-danger col-lg-12 col-md-12 col-sm-12 col-xs-12" role="alert" id="helpDiv" style="margin:0 auto;">
-    <p id="helpInfo" align="center" style="color: blue; font-weight: bold;" >按键提示</p></div>
+    <p id="helpInfo" align="center" style="color: blue; font-weight: bold;" >按键提示</p>
+    <div align="center" id="loveImg" style="display: none"><img src="/icon/love.png" style="width: 70px;height: 70px;" class="img-thumbnail"></div>
 </div>
+
+</div>
+
 <div class="col-lg-2 col-md-2 col-sm-0 col-xs-0 "></div>
 </body>
 
