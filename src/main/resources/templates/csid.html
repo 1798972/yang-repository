@@ -1,260 +1,463 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>查找城市id_1.1版本</title>
-    <script src="js/jquery-3.4.1.min.js" type="text/javascript"></script>
-    <script src="js/bootstrap.min.js" type="application/javascript"></script>
-    <script src="js/fincity.js" type="application/javascript"></script>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
 
-    <!--鼠标点击网页，聚焦到输入框-->
-    <script type="text/javascript">
-        $(function(){
-            $("#helpDiv").click(function(){
-                var t =document.getElementById("cityName");
-                //聚焦到输入框
-                t.focus();
-            });
-        })
-    </script>
+	<head>
+		<meta charset="UTF-8">
+		<title>查找城市id_1.2版本</title>
+		<script src="js/jquery-3.4.1.min.js" type="text/javascript"></script>
+		<script src="js/bootstrap.min.js" type="application/javascript"></script>
+		<script src="js/findcity.js" type="application/javascript"></script>
+		<script src="js/findcity2.js" type="application/javascript"></script>
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/bootstrap-theme.min.css">
 
-    <!--按回车查询,这是全局监听-->
-    <script type="text/javascript">
-        $(document).ready(function(e) {
-            $(this).keydown(function (e){
-                if(e.which == "13"){
-                    startSelect();
-                }
-            })
-        });
-    </script>
+		<!--鼠标点击网页，聚焦到输入框-->
+		<script type="text/javascript">
+			$(function() {
+				$("#helpDiv").click(function() {
+					//聚焦到输入框
+					//先判断隐藏了谁
+					if($('#cityName').is(':hidden')) {
+						var t = document.getElementById("cityName2");
+						t.focus();
+					} else {
+						var t = document.getElementById("cityName");
+						t.focus();
+					}
+				});
+			})
+		</script>
 
-    <!--复制文本-->
-    <script type="text/javascript">
-        function copyText(text) {
-            var textarea = document.createElement("textarea");
-            var currentFocus = document.activeElement;
-            document.body.appendChild(textarea);
-            textarea.value = text;
-            textarea.focus();
-            if (textarea.setSelectionRange)
-                textarea.setSelectionRange(0, textarea.value.length);
-            else
-                textarea.select();
-            try {
-                var flag = document.execCommand("copy");
-            } catch(eo){
-                var flag = false;
-            }
-            document.body.removeChild(textarea);
-            currentFocus.focus();
-            return flag;
-        }
-    </script>
+		<!--按回车查询,这是全局监听-->
+		<script type="text/javascript">
+			$(document).ready(function(e) {
+				$(this).keydown(function(e) {
+					if(e.which == "13") {
+						//判断是谁              
+						if($('#cityName').is(':hidden')) {
+							//县区查询按钮隐藏了 那么就调用市区查询的按钮
+							startSelect2();
+						} else {
+							//否则就是调用县区的查询
+							startSelect();
+						}
+					}
+				})
+			});
+		</script>
 
-    <!--按数字键完成复制操作-->
-    <script type="text/javascript">
-        $(document).ready(function(e) {
-            $(this).keydown(function (e){
-                //数字1
-                if(e.which == "97" || e.which == "49"){
-                    //1:天元区—[4302]—株洲市-湘B
-                    //获取序号1的cityId
-                    var cityId = $("#res1").text().substr(7,4);
-                    //复制cityId
-                    copyText(cityId);
-                    //复制[天元区]的id—>4302成功！
-                    var info = $("#res1").text().substr(2,3) + "]  的id—>"+cityId;
-                    $("#helpInfo").html("复制  ["+info+"成功！");
-                }
-                //数字2
-                if(e.which == "98" || e.which == "50"){
-                    //1:天元区—[4302]—株洲市-湘B
-                    //获取序号1的cityId
-                    var cityId = $("#res2").text().substr(7,4);
-                    //复制cityId
-                    copyText(cityId);
-                    var info = $("#res2").text().substr(2,3) + "]  的id—>"+cityId;
-                    $("#helpInfo").html("复制  ["+info+"成功！");
-                }
-                //数字3
-                if(e.which == "99" || e.which == "51"){
-                    //1:天元区—[4302]—株洲市-湘B
-                    //获取序号1的cityId
-                    var cityId = $("#res3").text().substr(7,4);
-                    //复制cityId
-                    copyText(cityId);
-                    var info = $("#res3").text().substr(2,3) + "]  的id—>"+cityId;
-                    $("#helpInfo").html("复制  ["+info+"成功！");
-                }
-                //数字4
-                if(e.which == "100" || e.which == "52"){
-                    //1:天元区—[4302]—株洲市-湘B
-                    //获取序号1的cityId
-                    var cityId = $("#res4").text().substr(7,4);
-                    //复制cityId
-                    copyText(cityId);
-                    var info = $("#res4").text().substr(2,3) + "]  的id—>"+cityId;
-                    $("#helpInfo").html("复制  ["+info+"成功！");
-                }
-                //数字5
-                if(e.which == "101" || e.which == "53"){
-                    //1:天元区—[4302]—株洲市-湘B
-                    //获取序号1的cityId
-                    var cityId = $("#res5").text().substr(7,4);
-                    //复制cityId
-                    copyText(cityId);
-                    var info = $("#res5").text().substr(2,3) + "]  的id—>"+cityId;
-                    $("#helpInfo").html("复制  ["+info+"成功！");
-                }
-                //数字6
-                if(e.which == "102" || e.which == "54"){
-                    //1:天元区—[4302]—株洲市-湘B
-                    //获取序号1的cityId
-                    var cityId = $("#res6").text().substr(7,4);
-                    //复制cityId
-                    copyText(cityId);
-                    var info = $("#res6").text().substr(2,3) + "]  的id—>"+cityId;
-                    $("#helpInfo").html("复制  ["+info+"成功！");
-                }
-                //数字7
-                if(e.which == "103" || e.which == "55"){
-                    //1:天元区—[4302]—株洲市-湘B
-                    //获取序号1的cityId
-                    var cityId = $("#res7").text().substr(7,4);
-                    //复制cityId
-                    copyText(cityId);
-                    var info = $("#res7").text().substr(2,3) + "]  的id—>"+cityId;
-                    $("#helpInfo").html("复制  ["+info+"成功！");
-                }
-                //删除键
-                if(e.which == "8"){
-                    $("#cityName").val("");
-                    $("#loveImg").hide();
-                    $("#helpInfo").html("清空了输入框的内容！");
-                    var t =document.getElementById("cityName");
-                    t.focus();
-                }
-            })
-        });
-    </script>
+		<!--左上角1旁边的完成切换功能-->
+		<script type="text/javascript">
+			$(document).ready(function(e) {
+				$(this).keydown(function(e) {
+					if(e.which == "113") {
+						//切换功能
+						if($('#cityName').is(':hidden')) {
+							//显示selectDiv1 隐藏2
+							$("#seleceDiv2").hide();
+							$("#seleceDiv1").show();
+							$("#tips2").hide();
+							$("#tips1").show();
+							return;
+						} else {
+							//显示selectDiv2 隐藏1
+							$("#seleceDiv1").hide();
+							$("#seleceDiv2").show();
+							$("#tips1").hide();
+							$("#tips2").show();
+							return;
+						}
+					}
+				})
+			});
+		</script>
+		<!--复制文本-->
+		<script type="text/javascript">
+			function copyText(text) {
+				var textarea = document.createElement("textarea");
+				var currentFocus = document.activeElement;
+				document.body.appendChild(textarea);
+				textarea.value = text;
+				textarea.focus();
+				if(textarea.setSelectionRange)
+					textarea.setSelectionRange(0, textarea.value.length);
+				else
+					textarea.select();
+				try {
+					var flag = document.execCommand("copy");
+				} catch(eo) {
+					var flag = false;
+				}
+				document.body.removeChild(textarea);
+				currentFocus.focus();
+				return flag;
+			}
+		</script>
 
-    <!--点击按钮完成查询-->
-    <script type="text/javascript">
-        function startSelect(){
-            //先清空表格内容
-            $("#myTable").html('');
-            //小杨的彩蛋
-            //获取的城市简拼
-            var city2char = $("#cityName").val();
-            //如果长度大于等于3
-            if (city2char.length>=3){
-                if (city2char.indexOf("sy520") != -1 &&city2char.length== 5) {
-                    $("#helpInfo").html("<html><body><p align=\"center\" style='color: #761c19'>人生路上过客很多<br/>他人向东向西向南向北<br/>而我&nbsp;&nbsp;只向你</p></body></html>");
-                    $("#loveImg").show();
-                    return;
-                }
-                if (city2char.indexOf("520") != -1 ){
-                    $("#helpInfo").html("<html><body><p align=\"center\" style='color:rebeccapurple'>清河流水,野马牛羊。<br/>桐花柳絮,洛阳树根。<br/>尽数美好,皆愿与你共享一生。</p></body></html>");
-                    $("#loveImg").hide();
-                    return;
-                }
-            }
-            $("#loveImg").hide();
-            var resStringList = findBy2char();
-            var temp = [];
-            //遍历数组显示结果
-            for (var i = 0; i < resStringList.length; i++) {
-                /*<b id=str"+ i +">*/
-                temp.push("<tr><td align=\"center\" id=\"res"+(i+1)+"\"><b>"+ resStringList[i]+"</b></td></tr>");
-            }
-            //append是在尾部追加!
-            $("#myTable").append(temp.join(''));
-            //让输入框失去焦点
-            $("#cityName").blur();
-            //默认复制第一个
-            var cityId = $("#res1").text().substr(7,4);
-            //复制cityId
-            copyText(cityId);
-            var info = $("#res1").text().substr(2,3) + "]  的id—>"+cityId;
-            $("#helpInfo").html("复制  ["+info+"成功！");
+		<!--按数字键完成复制操作-->
+		<script type="text/javascript">
+			$(document).ready(function(e) {
+				$(this).keydown(function(e) {
+					//数字1
+					if(e.which == "97" || e.which == "49") {
+						//查市区时，只存在一个两个结果的yy
+						if($('#cityName').is(':hidden')) {
+							//现在是市区
+							var cityname = $("#cnanme_res1").text().substr(5, 3);
+							if(cityname.indexOf("湘西土") != -1) {
+								cityname = "湘西土家苗族自治州";
+							}
+							if(cityname.indexOf("张家界") != -1) {
+								cityname = "张家界市";
+							}
+							copyText(cityname);
+							$("#helpInfo").html("复制  [<font color='#FF2D2D'>" + cityname + "</font>]成功！");
+						} else {
+							//1:天元区—[4302]—株洲市-湘B
+							//获取序号1的cityId
+							var cityId = $("#res1").text().substr(10, 4);
+							//复制cityId
+							copyText(cityId);
+							var info = $("#res1").text().substr(5, 3) + "]  的id—>" + "<font color='#FF2D2D'>" + cityId + "</font>";
+							$("#helpInfo").html("复制  [" + info + "成功！");
+						}
+					}
+					//数字2
+					if(e.which == "98" || e.which == "50") {
+						if($('#cityName').is(':hidden')) {
+							//现在是市区
+							var cityname = $("#cnanme_res2").text().substr(5, 3);
+							if(cityname.indexOf("湘西土") != -1) {
+								cityname = "湘西土家苗族自治州";
+							}
+							if(cityname.indexOf("张家界") != -1) {
+								cityname = "张家界市";
+							}
+							copyText(cityname);
+							$("#helpInfo").html("复制  [<font color='#FF2D2D'>" + cityname + "</font>]成功！");
+						} else {
+							//1:天元区—[4302]—株洲市-湘B
+							//获取序号1的cityId
+							var cityId = $("#res2").text().substr(10, 4);
+							//复制cityId
+							copyText(cityId);
+							var info = $("#res2").text().substr(5, 3) + "]  的id—>" + "<font color='#FF2D2D'>" + cityId + "</font>";
+							$("#helpInfo").html("复制  [" + info + "成功！");
+						}
+					}
+					//数字3
+					if(e.which == "99" || e.which == "51") {
+						var cityId = $("#res3").text().substr(10, 4);
+						//复制cityId
+						copyText(cityId);
+						var info = $("#res3").text().substr(5, 3) + "]  的id—>" + "<font color='#FF2D2D'>" + cityId + "</font>";
+						$("#helpInfo").html("复制  [" + info + "成功！");
+					}
+					//数字4
+					if(e.which == "100" || e.which == "52") {
+						var cityId = $("#res4").text().substr(10, 4);
+						//复制cityId
+						copyText(cityId);
+						var info = $("#res4").text().substr(5, 3) + "]  的id—>" + "<font color='#FF2D2D'>" + cityId + "</font>";
+						$("#helpInfo").html("复制  [" + info + "成功！");
+					}
+					//数字5
+					if(e.which == "101" || e.which == "53") {
+						var cityId = $("#res5").text().substr(10, 4);
+						//复制cityId
+						copyText(cityId);
+						var info = $("#res5").text().substr(5, 3) + "]  的id—>" + "<font color='#FF2D2D'>" + cityId + "</font>";
+						$("#helpInfo").html("复制  [" + info + "成功！");
+					}
+					//数字6
+					if(e.which == "102" || e.which == "54") {
+						var cityId = $("#res6").text().substr(10, 4);
+						//复制cityId
+						copyText(cityId);
+						var info = $("#res6").text().substr(5, 3) + "]  的id—>" + "<font color='#FF2D2D'>" + cityId + "</font>";
+						$("#helpInfo").html("复制  [" + info + "成功！");
+					}
+					//数字7
+					if(e.which == "103" || e.which == "55") {
+						var cityId = $("#res7").text().substr(10, 4);
+						//复制cityId
+						copyText(cityId);
+						var info = $("#res7").text().substr(5, 3) + "]  的id—>" + "<font color='#FF2D2D'>" + cityId + "</font>";
+						$("#helpInfo").html("复制  [" + info + "成功！");
+					}
+					//删除键
+					if(e.which == "8") {
+						$("#cityName").val("");
+						$("#cityName2").val("");
+						$("#loveImg").hide();
+						$("#helpInfo").html("清空了输入框的内容！");
+						//聚焦到输入框
+						//先判断隐藏了谁
+						if($('#cityName').is(':hidden')) {
+							var t = document.getElementById("cityName2");
+							t.focus();
+						} else {
+							var t = document.getElementById("cityName");
+							t.focus();
+						}
+					}
+				})
+			});
+		</script>
 
+		<!--点击[县区]按钮完成查询-->
+		<script type="text/javascript">
+			function startSelect() {
+				//先清空表格内容
+				$("#myTable").html('');
+				//小杨的彩蛋
+				//获取的城市简拼
+				var city2char = $("#cityName").val();
+				//如果长度大于等于3
+				if(city2char.length >= 3) {
+					if(city2char.indexOf("sy520") != -1 && city2char.length == 5) {
+						$("#helpInfo").html("<html><body><p align=\"center\" style='color: #761c19'>人生路上过客很多<br/>他人向东向西向南向北<br/>而我&nbsp;&nbsp;只向你</p></body></html>");
+						$("#loveImg").show();
+						return;
+					}
+					if(city2char.indexOf("520") != -1) {
+						$("#helpInfo").html("<html><body><p align=\"center\" style='color:rebeccapurple'>清河流水,野马牛羊。<br/>桐花柳絮,洛阳树根。<br/>尽数美好,皆愿与你共享一生。</p></body></html>");
+						$("#loveImg").hide();
+						return;
+					}
+				}
+				$("#loveImg").hide();
 
-        }
-    </script>
-</head>
+				//调用js的findBy2char完成操作
+				var resStringList = findBy2char();
+				var temp = [];
+				//遍历数组显示结果
+				for(var i = 0; i < resStringList.length; i++) {
+					/*<b id=str"+ i +">*/
+					temp.push("<tr><td align=\"center\" id=\"res" + (i + 1) + "\"><b><font color='blue'>[" + (i + 1) + "]&nbsp;&nbsp;</font>" + resStringList[i] + "</b></td></tr>");
+				}
+				//append是在尾部追加!
+				$("#myTable").append(temp.join(''));
+				//让输入框失去焦点
+				$("#cityName").blur();
+				//默认复制第一个
+				//[1]  芦淞区—[4302]—株洲市-湘B
+				var cityId = $("#res1").text().substr(10, 4);
+				//复制cityId
+				copyText(cityId);
+				var info = $("#res1").text().substr(5, 3) + "]  的id—>" + "<font color='#FF2D2D'>" + cityId + "</font>";
+				$("#helpInfo").html("复制  [" + info + "成功！");
+			}
+		</script>
 
-<body>
-<div class="col-lg-2 col-md-2 col-sm-0 col-xs-0"></div>
+		<!--点击[市区]按钮完成查询-->
+		<script type="text/javascript">
+			function startSelect2() {
+				//先清空表格内容
+				$("#myTable").html('');
+				var city2char = $("#cityName2").val();
 
-<!--中间的是显示部分-->
-<div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-    <!--1.操作提示-->
-    <div class="alert alert-success col-lg-12 col-md-12 hidden-sm hidden-xs" role="alert">
-        <div class="panel-heading" style="text-align: center;">
-            <h3 class="panel-title" style="color: blueviolet;"><b>操作提示(请认真阅读本部分，在缩小后本区域将自动隐藏)</b></h3>
-        </div>
-        <div class="panel-body">
-        <font style="color: deeppink; "><b>加油小瑶瑶!</b></font>
-        <br> <font color="slateblue"><b>1.快捷键:</b></font>
-        <font color="#2E6DA4">
-            <br> &nbsp;&nbsp;A:按下<b>删除键</b>，清除输入内容并聚焦输入框，可直接进行输入。
-            <br> &nbsp;&nbsp;B:按下<b>回车</b>完成查询，默认复制第一项内容。
-            <br> &nbsp;&nbsp;C:点击底部"<b>按键提示(蓝色字体部分)</b>"区域同样能聚焦到输入框。
-        </font>
-        <br> <font color="slateblue"><b>2.第一次查询时:</b></font>
-        <font color="#2E6DA4">
-            <br> &nbsp;&nbsp;A.当结果只有一个时,已经完成复制,直接粘贴即可。
-            <br> &nbsp;&nbsp;B.当结果有两个时，默认复制了第一个，按下数字键2可完成对第二个id的复制。
-            <br> &nbsp;&nbsp;C.当结果有多个时，请以此类推。
-        </font>
-        <br> <font color="slateblue"><b>3.再次查询时:</b></font>
-        <font color="#2E6DA4">
-            <br> &nbsp;&nbsp;A.直接按删除按钮清除内容，即可再次输入。
-            <br> &nbsp;&nbsp;B.点击底部"按键提示(蓝色字体部分)"聚焦到输入框，之后按删除键清除内容，即可再次输入。
-        </font>
-        <br> <font color="slateblue"><b>现在按删除键聚焦至输入框，开始查询吧！</b></font>
-    </div>
-</div>
+				//结果1显示市区信息
+				resArray1 = findCityBy2char_Name();
+				var temp = [];
+				for(var i = 0; i < resArray1.length; i++) {
+					/*<b id=str"+ i +">*/
+					temp.push("<tr><td align=\"center\" id=\"cnanme_res" + (i + 1) + "\"><b>" + "<font color='blue'>[" + (i + 1) + "]&nbsp;&nbsp;</font>" + resArray1[i] + "</b></td></tr>");
+				}
+				//append是在尾部追加!
+				$("#myTable").append(temp.join(''));
 
-<!--2.输入框-->
-<div class="alert alert-info col-lg-12 col-md-12 col-sm-12 col-xs-12 " role="alert ">
-    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 "></div>
-    <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 ">
-        <div class="input-group ">
-            <input type="text " class="form-control " id="cityName" placeholder="请在此处输入地名前两字的简拼,eg:天元区——>输入ty">
-            <span class="input-group-btn ">
-				        <button class="btn btn-default " type="button " onclick="startSelect()" >查询</button>
+				//默认复制第一个
+				//[1]  株洲市—湘B—4302
+				var cityname = $("#cnanme_res1").text().substr(5, 3);
+				if(cityname.indexOf("湘西土") != -1) {
+					cityname = "湘西土家苗族自治州";
+				}
+				if(cityname.indexOf("张家界") != -1) {
+					cityname = "张家界市";
+				}
+				//复制cityId
+				copyText(cityname);
+				$("#helpInfo").html("复制  [<font color='#FF2D2D'>" + cityname + "</font>]成功！");
+
+				//结果2显示包含的县城
+				resArray2 = findCityBy2char_Countrys();
+				var temp = [];
+				temp.push("<tr><td align=\"center\"><b><font color='slateblue'>————————————————</font></b></td></tr>");
+				for(var i = 0; i < resArray2.length; i++) {
+					//          	console.log(resArray2[i].length);
+					for(var x = 0; x < resArray2[i].length; x++) {
+						//				 	console.log(resArray2[i][x]);
+						temp.push("<tr><td align=\"center\" id=\"ccountry_res" + (x + 1) + "\"><b>" + "<font color='green'>" + (x + 1) + "&nbsp;&nbsp;</font>" + resArray2[i][x] + "</b></td></tr>");
+					}
+					temp.push("<tr><td align=\"center\"><b><font color='slateblue'>————————————————</font></b></td></tr>");
+				}
+				$("#myTable").append(temp.join(''));
+				//让输入框失去焦点
+				$("#cityName2").blur();
+			}
+		</script>
+	</head>
+
+	<body>
+		<div class="col-lg-2 col-md-2 col-sm-0 col-xs-0"></div>
+
+		<!--中间的是显示部分-->
+		<div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+			<!--1.操作提示-->
+			<div class="alert alert-success col-lg-12 col-md-12 hidden-sm hidden-xs" role="alert" id="tips1">
+				<div class="panel-heading" style="text-align: center;">
+					<h3 class="panel-title" style="color: blueviolet;"><b>操作提示(请认真阅读本部分，在缩小后本区域将自动隐藏)</b></h3>
+				</div>
+				<div class="panel-body">
+					<font style="color: deeppink; "><b>加油小瑶瑶!</b></font>
+					<br>
+					<font color="slateblue"><b>县区部分复制的是"县区ID"，eg:4302</b></font>
+					<br>
+					<font color="slateblue"><b>1.快捷键:</b></font>
+					<font color="#2E6DA4">
+						<br> &nbsp;&nbsp;A:按下<b>删除键</b>，清除输入内容并聚焦输入框，可直接进行输入。
+						<br> &nbsp;&nbsp;B:按下<b>回车</b>完成查询，默认复制第一项内容。
+						<br> &nbsp;&nbsp;C:点击底部"<b>按键提示(蓝色字体部分)</b>"区域同样能聚焦到输入框。
+					</font>
+					<br>
+					<font color="slateblue"><b>2.第一次查询时:</b></font>
+					<font color="#2E6DA4">
+						<br> &nbsp;&nbsp;A.当结果只有一个时,已经完成复制,直接粘贴即可。
+						<br> &nbsp;&nbsp;B.当结果有两个时，默认复制了第一个，按下数字键2可完成对第二个id的复制。
+						<br> &nbsp;&nbsp;C.当结果有多个时，请以此类推。
+					</font>
+					<br>
+					<font color="slateblue"><b>3.再次查询时:</b></font>
+					<font color="#2E6DA4">
+						<br> &nbsp;&nbsp;A.直接按删除按钮清除内容，即可再次输入。
+						<br> &nbsp;&nbsp;B.点击最底部"按键提示(蓝色字体部分)"聚焦到输入框，之后按删除键清除内容，即可再次输入。
+					</font>
+					<br>
+					<font color="slateblue"><b>现在按<font color="red">删除键聚焦</font>至输入框，开始查询吧！<font color="red">*输入不了字母按删除键就ok</font></b></font>
+				</div>
+			</div>
+
+			<!--提示框2-->
+			<div style="display: none" class="alert alert-success col-lg-12 col-md-12 hidden-sm hidden-xs" role="alert" id="tips2">
+				<div class="panel-heading" style="text-align: center;">
+					<h3 class="panel-title" style="color: blueviolet;"><b>根据市区查找</b></h3>
+				</div>
+				<div class="panel-body">
+					<font style="color: deeppink; "><b>加油小瑶瑶!</b></font>
+					<br>
+					<font color="slateblue"><b>市区部分复制的是"市区名字"，eg:株洲市</b></font>
+					<br>
+					<font color="slateblue"><b>按<font color="red">F2</font>可以快捷切换功能</b></font>
+					<font color="#2E6DA4">
+						<br> &nbsp;&nbsp;A:同之前的操作，按下对应的数字键可以快速复制市名。
+						<br> &nbsp;&nbsp;B:
+						<font color="red">县城</font>编号只是为了方便阅读，暂
+						<font color="red">未提供复制快捷键</font>。
+						<br> &nbsp;&nbsp;C:
+						<font color="red">因为</font>市区对应的县城太多，很难快速看到想要的结果。
+						<br> &nbsp;&nbsp;D:有什么改进方法、其他建议或者发现Bug，可以让小瑶同学提醒我。
+					</font>
+				</div>
+			</div>
+
+			<!--2.输入框-->
+			<div class="alert alert-info col-lg-12 col-md-12 col-sm-12 col-xs-12 " role="alert" id="seleceDiv1">
+				<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 "></div>
+				<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 ">
+					<!--功能选择-->
+					<script type="text/javascript">
+						$(document).ready(function() {
+							$('ul li').click(function() {
+								//获得点击元素的id
+								var clickLi = $(this).attr("id");
+								if(clickLi == 'myLi1') {
+									//显示selectDiv1 隐藏2
+									$("#seleceDiv2").hide();
+									$("#seleceDiv1").show();
+									$("#tips2").hide();
+									$("#tips1").show();
+								} else {
+									//显示selectDiv2 隐藏1
+									$("#seleceDiv1").hide();
+									$("#seleceDiv2").show();
+									$("#tips1").hide();
+									$("#tips2").show();
+								}
+							});
+						});
+					</script>
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<ul class="nav nav-tabs " style="display:table;height:auto;margin:0 auto;">
+							<li role="presentation" class="active" id="myLi1">
+								<a href="#">按
+									<font color="brown"><b>县</b></font>区查找</a>
+							</li>
+							<li role="presentation" id="myLi2">
+								<a href="#">按
+									<font color="#3E8F3E"><b>市</b></font>区查找</a>
+							</li>
+						</ul>
+					</div>
+					<!--输入框-->
+					<div class="input-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<input type="text " class="form-control " id="cityName" placeholder="请在此处输入[县区]地名前两字的简拼,eg:天元区——>输入ty">
+						<span class="input-group-btn ">
+				        <button class="btn btn-default " type="button " onclick="startSelect()" >县区查询</button>
 				      </span>
-        </div>
-    </div>
-    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 "></div>
-</div>
+					</div>
+				</div>
+				<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 "></div>
+			</div>
 
-<!--3.显示区域-->
-<div class="alert alert-warning col-lg-12 col-md-12 col-sm-12 col-xs-12 " role="alert ">
-    <div class="panel-heading" style="text-align: center;
+			<!--2.输入框2默认不显示-->
+			<div style="display: none" class="alert alert-info col-lg-12 col-md-12 col-sm-12 col-xs-12 " role="alert" id="seleceDiv2">
+				<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 "></div>
+				<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8 ">
+					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<ul class="nav nav-tabs " style="display:table;height:auto;margin:0 auto;">
+							<li role="presentation" id="myLi1">
+								<a href="#">按
+									<font color="brown"><b>县</b></font>区查找</a>
+							</li>
+							<li role="presentation" class="active" id="myLi2">
+								<a href="#">按
+									<font color="#3E8F3E"><b>市</b></font>区查找</a>
+							</li>
+						</ul>
+					</div>
+					<div class="input-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<input type="text " class="form-control " id="cityName2" placeholder="请在此处输入[市区]地名前两字的简拼,eg:株洲市——>输入zz">
+						<span class="input-group-btn ">
+				        <button class="btn btn-default " type="button " onclick="startSelect2()" >市区查询</button>
+				      </span>
+					</div>
+				</div>
+				<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2 "></div>
+			</div>
+
+			<!--3.显示区域-->
+			<div class="alert alert-warning col-lg-12 col-md-12 col-sm-12 col-xs-12 " role="alert ">
+				<div class="panel-heading" style="text-align: center;
 					    color: red;
 					    -webkit-text-stroke: thin;">查询结果如下
-    </div>
-    <div>
-        <!--在下面遍历显示查询结果-->
-        <table class="table" id="myTable">
-        </table>
-    </div>
-</div>
+				</div>
+				<div>
+					<!--在下面遍历显示查询结果-->
+					<table class="table" id="myTable">
+					</table>
+				</div>
+			</div>
 
-<!--4.按键提示-->
-<div class="alert alert-danger col-lg-12 col-md-12 col-sm-12 col-xs-12" role="alert" id="helpDiv" style="margin:0 auto;">
-    <p id="helpInfo" align="center" style="color: blue; font-weight: bold;" >按键提示</p>
-    <div align="center" id="loveImg" style="display: none"><img src="/icon/love.png" style="width: 70px;height: 70px;" class="img-thumbnail"></div>
-</div>
+			<!--4.按键提示-->
+			<div class="alert alert-danger col-lg-12 col-md-12 col-sm-12 col-xs-12" role="alert" id="helpDiv" style="margin:0 auto;">
+				<p id="helpInfo" align="center" style="color: blue; font-weight: bold;">按键提示</p>
+				<div align="center" id="loveImg" style="display: none"><img src="/icon/love.png" style="width: 70px;height: 70px;" class="img-thumbnail"></div>
+			</div>
 
-</div>
+		</div>
 
-<div class="col-lg-2 col-md-2 col-sm-0 col-xs-0 "></div>
-</body>
+		<div class="col-lg-2 col-md-2 col-sm-0 col-xs-0 "></div>
+	</body>
 
 </html>

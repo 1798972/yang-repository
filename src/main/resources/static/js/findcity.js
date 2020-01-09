@@ -1,4 +1,5 @@
-  //城市数组
+/*根据县区查找*/
+//城市数组
     var changsha4301 = ["FRQ芙蓉区","TXQ天心区","YLQ岳麓区","KFQ开福区","YHQ雨花区","WCQ望城区","CSX长沙县","NXX宁乡县","NYS浏阳市"];
     var zhuzhou4302 = ["HTQ荷塘区","LSQ芦淞区","SFQ石峰区","TYQ天元区","YLQ云龙区","ZZX株洲县","YX攸县","CLX茶陵县","YLX炎陵县","LLS醴陵市"];
     var xiangtan4303 = ["YHQ雨湖区","YTQ岳塘区","XTX湘潭县","XXS湘乡市","SSS韶山市"];
@@ -93,11 +94,11 @@ function findBy2char(){
  			var resStringList = new Array();
 		//获取的城市简拼
    		var city2char = $("#cityName").val();
-    	//查找得到城市id以及县城名字
+   	//查找得到城市id以及县城名字
 		findCityId(city2char);
 		
 		var i = 1;
-		for (var [key,value] of resCityIdAndCountyName) {
+		for (var [key, value] of resCityIdAndCountyName) {
 //			alert(key);
 
 			//根据城市id找到城市名字-车牌号
@@ -105,7 +106,7 @@ function findBy2char(){
 //			console.log(oneCityName);
 
 			//将查找结果拼接成字符串
-            var resString =i+":"+resCityIdAndCountyName.get(key)+"—["+key+"]—"+oneCityName;
+            var resString = resCityIdAndCountyName.get(key)+"—["+key+"]—"+oneCityName;
             //将结果放进resString中
             resStringList.push(resString);
             i++;
