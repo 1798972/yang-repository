@@ -25,7 +25,7 @@ public interface QuestionMapper {
     //   1.查询语句里  creator = #{creator} 这里是指明creator的值是在#{creator}这一列,model类的属性要跟他对应上。
     //   2.方法的形参中  @Param("creator") int id 说明id映射的是creator这一列
     @Select("select * from questions where creator = #{creator} limit #{offset},#{size}")
-    List<Question> myQuestionList(@Param("creator") Long id,@Param("offset") Integer offset,@Param("size") Integer size);
+    List<Question> myQuestionList(@Param("creator") Long id, @Param("offset") Integer offset, @Param("size") Integer size);
 
     //4.查询某个用户的问题条数
     @Select("select count(1) from questions where creator = #{creator}")
@@ -47,6 +47,11 @@ public interface QuestionMapper {
     @Update("update questions set comment_count = comment_count + 1 where id = #{id}")
     void increaseCommentCounnt(@Param("id") Long parentId);
 
+    //9.删除某个问题
     @Delete("delete from questions where id = #{id}")
     void deleteByQuestionId(Long questionId);
+
+    //10.查询相关问题
+    @Select("select * from questions where id != #{id} and tag regexp #{tag}")
+    List<Question> findAboutQuestions(@Param("id")Long id,@Param("tag")String regTag);
 }

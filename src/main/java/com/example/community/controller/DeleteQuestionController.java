@@ -16,16 +16,17 @@ import org.springframework.web.servlet.ModelAndView;
  * @Date: Create in 11:04 2019/12/16
  */
 @Controller
-public class DeleteQuestionController{
+public class DeleteQuestionController {
 
     @Autowired
     private QuestionMapper questionMapper;
     @Autowired
     private QuestionService questionService;
+
     //注意  @PathVariable  eg：/profile/{id}
     //      @RequestParam  eg：/profile?id=20
     @RequestMapping("/deletequestion/{questionId}")
-    public String deleteQuestion(@PathVariable("questionId")Long questionId){
+    public String deleteQuestion(@PathVariable("questionId") Long questionId) {
         questionService.deleteByQuestionId(questionId);
         return "redirect:/";
     }

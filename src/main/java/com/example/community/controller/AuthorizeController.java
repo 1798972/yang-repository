@@ -42,7 +42,7 @@ public class AuthorizeController {
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
                            @RequestParam(name = "state") String state,
-                           HttpServletResponse response){
+                           HttpServletResponse response) {
 
 
         //对回传的地址进行处理
@@ -59,11 +59,11 @@ public class AuthorizeController {
         //通过token得到用户
         GitHubUser gitHubUser = gitHubProvider.getUser(accessToken);
 //        System.out.println("github用户:"+gitHubUser);
-        if(gitHubUser!=null){
+        if (gitHubUser != null) {
             User user = new User();
             //token用于识别用户身份
             //1.数据库查询到accountId 如果登录的用户accountId已经存在 说明已经登录过了
-                //更新他的token
+            //更新他的token
             //2.否则是第一次登录 做插入操作
             String token = UUID.randomUUID().toString();
             user.setToken(token);
@@ -73,10 +73,10 @@ public class AuthorizeController {
             user.setAvatarUrl(gitHubUser.getAvatarUrl());
             //得到用户 判断用户是否存在
             userService.insertOrUpdate(user);
-            response.addCookie(new Cookie("token",token));
+            response.addCookie(new Cookie("token", token));
 
             return "redirect:/";
-        }else {
+        } else {
             System.out.println("登录失败！！");
             return "redirect:/";
         }

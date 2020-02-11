@@ -24,7 +24,7 @@ public enum CommentTypeEnums {
         return type;
     }
 
-    CommentTypeEnums(Integer type){
+    CommentTypeEnums(Integer type) {
         this.type = type;
     }
 }

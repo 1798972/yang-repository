@@ -34,13 +34,13 @@ public class ProfileController {
     @GetMapping("/profile/{action}")  //动态指定action 确定跳转到哪个标签页面
     public String profile(HttpServletRequest request,
                           Model model,
-                          @PathVariable(name = "action")String action,
-                          @RequestParam(name = "page",defaultValue = "1")Integer page,
-                          @RequestParam(name = "size",defaultValue = "5")Integer size
-                          ){
+                          @PathVariable(name = "action") String action,
+                          @RequestParam(name = "page", defaultValue = "1") Integer page,
+                          @RequestParam(name = "size", defaultValue = "5") Integer size
+    ) {
 
-        User user = (User)request.getSession().getAttribute("user");
-        if (user == null){
+        User user = (User) request.getSession().getAttribute("user");
+        if (user == null) {
             //请求转发 这个时候交给IndexController处理 没有数据会报错
 //            return "index";
             //直接重定向
@@ -48,27 +48,27 @@ public class ProfileController {
         }
 
         //处理标签的跳转
-        if ("questions".equals(action)){
-            model.addAttribute("section","questions");
-            model.addAttribute("sectionName","我的问题");
-        }else if("replies".equals(action)){
-            model.addAttribute("section","replies");
-            model.addAttribute("sectionName","最新回复");
+        if ("questions".equals(action)) {
+            model.addAttribute("section", "questions");
+            model.addAttribute("sectionName", "我的问题");
+        } else if ("replies".equals(action)) {
+            model.addAttribute("section", "replies");
+            model.addAttribute("sectionName", "最新回复");
         }
 
-        PageInfoDTO userPageinfo = questionService.myQuestionList(user.getId(),page,size);
-        model.addAttribute("userPageinfo",userPageinfo);
+        PageInfoDTO userPageinfo = questionService.myQuestionList(user.getId(), page, size);
+        model.addAttribute("userPageinfo", userPageinfo);
         return "profile";
     }
 
-//    @GetMapping("/logout")
-    @RequestMapping(method = RequestMethod.GET,value = "/logout")
+    //    @GetMapping("/logout")
+    @RequestMapping(method = RequestMethod.GET, value = "/logout")
     public String logOut(HttpServletRequest request,
-                         HttpServletResponse response){
+                         HttpServletResponse response) {
         //1.移除session
         request.getSession().removeAttribute("user");
         //2.移除cookie 替换掉token即可
-        Cookie out = new Cookie("token",null);
+        Cookie out = new Cookie("token", null);
         out.setMaxAge(0);
         response.addCookie(out);
         return "redirect:/";

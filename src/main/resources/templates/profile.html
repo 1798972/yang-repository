@@ -15,13 +15,14 @@
 <body>
 <div th:insert="navigation :: nav"></div> <!--fragment的引用-->
 <!--问题列表显示-->
-<div class="container-fluid main profile"  >
+<div class="container-fluid main profile">
     <div class="row"> <!--分成12份 最开始是9:3的宽度 后面会变垂直排列一样宽度-->
-        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12" >
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
             <h3><span th:text="${sectionName}"></span></h3>
             <hr>
             <!--循环文章列表 得到每一个文章-->
-            <div class="media"  th:if="${userPageinfo.questions != null}" th:each="questionDTO : ${userPageinfo.questions}">
+            <div class="media" th:if="${userPageinfo.questions != null}"
+                 th:each="questionDTO : ${userPageinfo.questions}">
                 <div class="media-left">
                     <a href="#">
                         <img class="media-object img-rounded avatar-icon"
@@ -30,7 +31,8 @@
                 </div>
                 <div class="media-body">
                     <h4 class="media-heading">
-                        <a th:href="@{/question/{questionId} (questionId=${questionDTO.id})}" th:text="${questionDTO.title}"></a>
+                        <a th:href="@{/question/{questionId} (questionId=${questionDTO.id})}"
+                           th:text="${questionDTO.title}"></a>
                     </h4>
                     <span th:text="${questionDTO.description}"></span><br>
                     <span class="text">
@@ -60,7 +62,7 @@
                         </a>
                     </li>
                     <!--当前页-->
-                    <li th:class="${userPageinfo.nowPage==page}?'active':''" th:each="page : ${userPageinfo.hasPages}" >
+                    <li th:class="${userPageinfo.nowPage==page}?'active':''" th:each="page : ${userPageinfo.hasPages}">
                         <a th:href="@{'/profile/'+${section}(page=${page})}" th:text="${page}"></a>
                     </li>
                     <!--下一页-->
@@ -80,10 +82,13 @@
         </div>
 
         <!--右侧的选择便签栏-->
-        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" >
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <div class="list-group section">
-                <a href="/profile/questions" th:class="${section=='questions'} ? 'list-group-item active' : 'list-group-item' ">我的问题</span></a>
-                <a href="/profile/replies" th:class="${section=='replies'} ? 'list-group-item active' : 'list-group-item' ">最新回复<span class="badge">14</span></a>
+                <a href="/profile/questions"
+                   th:class="${section=='questions'} ? 'list-group-item active' : 'list-group-item' ">我的问题</span></a>
+                <a href="/profile/replies"
+                   th:class="${section=='replies'} ? 'list-group-item active' : 'list-group-item' ">最新回复<span
+                        class="badge">14</span></a>
             </div>
         </div>
     </div>

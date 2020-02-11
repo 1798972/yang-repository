@@ -38,40 +38,47 @@ public class CommentService {
 
     @Transactional
     public void insert(Comment comment) {
-        if (comment.getParentId() == null || comment.getParentId() == 0){
+        if (comment.getParentId() == null || comment.getParentId() == 0) {
 
             //CustomizeExceptionHandler中做处理
             throw new CustomizeException(CustomizeErrorCode.TARGET_PATH_NOT_FOUND);
         }
-        if (comment.getType() == null || !CommentTypeEnums.isExist(comment.getType())){
+        if (comment.getType() == null || !CommentTypeEnums.isExist(comment.getType())) {
             throw new CustomizeException(CustomizeErrorCode.TYPE_PARAM_WRONG);
         }
 
-        if (comment.getType() == CommentTypeEnums.COMMENT.getType()){
+        if (comment.getType() == CommentTypeEnums.COMMENT.getType()) {
             //回复的是评论
-            Comment dbComment = commentMapper.selectById(comment.getId());
-            if (dbComment == null){
-             throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
+            //重构方法后好像都是parentId了
+            Comment dbComment = commentMapper.selectById(comment.getParentId());
+            if (dbComment == null) {
+                throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
             }
-                commentMapper.insert(comment);
-        }
+            commentMapper.insert(comment);
 
-        else {
+            //增加评论数 前面插入的是子评论
+            //增加的评论数 是添加在它的父评论上
+            Comment parentComment = new Comment();
+            parentComment.setId(comment.getParentId());
+            parentComment.setCommentCount(1);
+            commentMapper.increase2CommentCounnt(parentComment.getId());
+        } else {
             //回复的是问题
-           Question question =  questionMapper.findById(comment.getParentId());
-           if (question == null){
-               throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
-           }
-               commentMapper.insert(comment);
-               //评论数加1
+            Question question = questionMapper.findById(comment.getParentId());
+            if (question == null) {
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
+            commentMapper.insert(comment);
+            //评论数加1
 //                question.setCommentCount(1);
-               questionMapper.increaseCommentCounnt(comment.getParentId());
+            questionMapper.increaseCommentCounnt(comment.getParentId());
         }
     }
 
+    //根据问题id找到所有评论
     public List<CommentDTO> findByQuestionId(Long questionId) {
         List<Comment> comments = commentMapper.findByQuestionId(questionId);
-        if (comments.size() == 0){
+        if (comments.size() == 0) {
             return new ArrayList<>();
         }
 
@@ -80,11 +87,11 @@ public class CommentService {
         //Set的使用 lambda表达式的使用
         Set<Long> commentator = comments.stream().map(comment -> comment.getCommentator()).collect(Collectors.toSet());
 
-            //所有的userId
+        //所有的userId
         List<Long> userIds = new ArrayList<>();
         userIds.addAll(commentator);
 
-             //根据userId集合查出所有的user
+        //根据userId集合查出所有的user
         List<User> users = new ArrayList<>();
         User tempUser;
         for (Long userId : userIds) {
@@ -93,7 +100,7 @@ public class CommentService {
         }
 
         //遍历Questions下的所有comments
-            //如果comment的userId跟user的userId相等 则说明这个comment是这个user评论的
+        //如果comment的userId跟user的userId相等 则说明这个comment是这个user评论的
         //时间复杂度n平方  不合适
 //        for (Comment comment : comments) {
 //            for (User user : users) {
@@ -106,7 +113,53 @@ public class CommentService {
         //转换comment为commentDTO 即加上user属性
         List<CommentDTO> commentDTOS = comments.stream().map(comment -> {
             CommentDTO commentDTO = new CommentDTO();
-            BeanUtils.copyProperties(comment,commentDTO);
+            BeanUtils.copyProperties(comment, commentDTO);
+            commentDTO.setUser(userMap.get(comment.getCommentator()));
+            return commentDTO;
+        }).collect(Collectors.toList());
+
+        return commentDTOS;
+    }
+
+    //根据评论id找到所有二级评论
+    public List<CommentDTO> findByCommentId(Long commentId) {
+        List<Comment> comments = commentMapper.findByCommentId(commentId);
+        if (comments.size() == 0) {
+            return new ArrayList<>();
+        }
+
+        //获取去重复的评论人
+        //eg;十条评论 有五条是同一个用户 为了避免重复 所以用不着拿出十个用户
+        //Set的使用 lambda表达式的使用
+        Set<Long> commentator = comments.stream().map(comment -> comment.getCommentator()).collect(Collectors.toSet());
+
+        //所有的userId
+        List<Long> userIds = new ArrayList<>();
+        userIds.addAll(commentator);
+
+        //根据userId集合查出所有的user
+        List<User> users = new ArrayList<>();
+        User tempUser;
+        for (Long userId : userIds) {
+            tempUser = userMapper.findById(userId);
+            users.add(tempUser);
+        }
+
+        //遍历Questions下的所有comments
+        //如果comment的userId跟user的userId相等 则说明这个comment是这个user评论的
+        //时间复杂度n平方  不合适
+//        for (Comment comment : comments) {
+//            for (User user : users) {
+//            }
+//        }
+
+        //得到userId以及user的Map
+        Map<Long, User> userMap = users.stream().collect(Collectors.toMap(user -> user.getId(), user -> user));
+
+        //转换comment为commentDTO 即加上user属性
+        List<CommentDTO> commentDTOS = comments.stream().map(comment -> {
+            CommentDTO commentDTO = new CommentDTO();
+            BeanUtils.copyProperties(comment, commentDTO);
             commentDTO.setUser(userMap.get(comment.getCommentator()));
             return commentDTO;
         }).collect(Collectors.toList());

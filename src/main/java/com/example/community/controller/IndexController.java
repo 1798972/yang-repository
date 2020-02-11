@@ -17,12 +17,12 @@ public class IndexController {
 
     @GetMapping("/")
     public String index(Model model,
-                        @RequestParam(name = "page",defaultValue = "1")Integer page,
-                        @RequestParam(name = "size",defaultValue = "5")Integer size){
+                        @RequestParam(name = "page", defaultValue = "1") Integer page,
+                        @RequestParam(name = "size", defaultValue = "5") Integer size) {
 
         //获取问题列表
-        PageInfoDTO pageInfo = questionService.getQuestionDTOList(page,size);
-        model.addAttribute("pageInfo",pageInfo);
+        PageInfoDTO pageInfo = questionService.getQuestionDTOList(page, size);
+        model.addAttribute("pageInfo", pageInfo);
 
         return "index";
     }

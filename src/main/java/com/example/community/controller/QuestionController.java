@@ -25,19 +25,23 @@ public class QuestionController {
 
     @Autowired
     private CommentService commentService;
+
     @GetMapping("/question/{questionId}")
-    String questionDetail(@PathVariable("questionId")Long questionId,
-                         Model model){
+    String questionDetail(@PathVariable("questionId") Long questionId,
+                          Model model) {
         //1.得到文问题id problem_id
         //2.根据问题id查找得到问题数据
-            //在查看问题之前 让阅读数加1
+        //在查看问题之前 让阅读数加1
         questionService.increaseViewCount(questionId);
 
         //QuestionDTO中有新加的User属性
         QuestionDTO questionDTO = questionService.findById(questionId);
         List<CommentDTO> comments = commentService.findByQuestionId(questionId);
-            model.addAttribute("question",questionDTO);
-            model.addAttribute("comments",comments);
+        List<QuestionDTO> aboutQuestions = questionService.findAboutQuestions(questionId);
+        model.addAttribute("question", questionDTO);
+        model.addAttribute("comments", comments);
+        //添加相关问题
+        model.addAttribute("aboutQuestions",aboutQuestions);
 //        System.out.println(comments);
         return "question";
     }

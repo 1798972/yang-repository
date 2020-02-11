@@ -38,16 +38,16 @@ public class CustomizeController implements ErrorController {
         return new ModelAndView("error");
     }
 
-    private HttpStatus getStatus(HttpServletRequest request){
+    private HttpStatus getStatus(HttpServletRequest request) {
 
         Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
-        if (statusCode == null){
+        if (statusCode == null) {
             return HttpStatus.INTERNAL_SERVER_ERROR;
         }
         try {
             return HttpStatus.valueOf(statusCode);
-        }catch (Exception e){
-        return HttpStatus.INTERNAL_SERVER_ERROR;
+        } catch (Exception e) {
+            return HttpStatus.INTERNAL_SERVER_ERROR;
         }
     }
 }

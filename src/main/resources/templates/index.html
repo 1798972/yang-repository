@@ -12,7 +12,7 @@
 <script type="text/javascript">
     window.onload = function () {
         var close = window.localStorage.getItem("close");
-        if ("true" == close){
+        if ("true" == close) {
             window.close();
             window.localStorage.removeItem("close");
         }
@@ -22,13 +22,13 @@
 <body>
 <div th:insert="navigation :: nav"></div> <!--fragment的引用-->
 <!--问题列表显示-->
-<div class="container-fluid main"  >
+<div class="container-fluid main">
     <div class="row"> <!--分成12份 最开始是9:3的宽度 后面会变垂直排列一样宽度-->
-        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12" >
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
             <h3><span class="glyphicon glyphicon-th-list">文章列表</span></h3>
             <hr>
             <!--循环文章列表 得到每一个文章-->
-            <div class="media"  th:if="${pageInfo.questions != null}" th:each="questionDTO : ${pageInfo.questions}">
+            <div class="media" th:if="${pageInfo.questions != null}" th:each="questionDTO : ${pageInfo.questions}">
                 <div class="media-left">
                     <a href="#">
                         <img class="media-object img-rounded avatar-icon"
@@ -37,10 +37,11 @@
                 </div>
                 <div class="media-body">
                     <!--!!!!!!!!!!!!!!!!!!!-->
-                  <h4 class="media-heading">
-                     <!-- th:href="@{'/question/'+${questionDTO.id}}-->
-                      <a th:href="@{/question/{questionId} (questionId=${questionDTO.id})}" th:text="${questionDTO.title}"></a></h4>
-                     <span th:text="${questionDTO.description}"></span><br>
+                    <h4 class="media-heading">
+                        <!-- th:href="@{'/question/'+${questionDTO.id}}-->
+                        <a th:href="@{/question/{questionId} (questionId=${questionDTO.id})}"
+                           th:text="${questionDTO.title}"></a></h4>
+                    <span th:text="${questionDTO.description}"></span><br>
                     <span class="text">
                         <span th:text="${questionDTO.commentCount}"></span>回复/
                         <span th:text="${questionDTO.viewCount}"></span>浏览/
@@ -65,9 +66,9 @@
                         </a>
                     </li>
                     <!--当前页-->
-                        <li th:class="${pageInfo.nowPage==page}?'active':''" th:each="page : ${pageInfo.hasPages}" >
-                            <a th:href="@{/(page=${page})}" th:text="${page}"></a>
-                        </li>
+                    <li th:class="${pageInfo.nowPage==page}?'active':''" th:each="page : ${pageInfo.hasPages}">
+                        <a th:href="@{/(page=${page})}" th:text="${page}"></a>
+                    </li>
                     <!--下一页-->
                     <li th:if="${pageInfo.showNextPage}">
                         <a th:href="@{/(page=${pageInfo.nowPage+1})}" aria-label="Next">
@@ -83,15 +84,11 @@
                 </ul>
             </nav>
         </div>
-        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" >
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <h3>慢慢增加内容</h3>
             <ul>
                 <li>QQ:1798972</li>
                 <li>T:18784938593</li>
-                <li>第3句话</li>
-                <li>第4句话</li>
-                <li>第5句话</li>
-                <li>第6句话</li>
             </ul>
         </div>
     </div>

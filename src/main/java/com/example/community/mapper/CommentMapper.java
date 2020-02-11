@@ -1,10 +1,7 @@
 package com.example.community.mapper;
 
 import com.example.community.model.Comment;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -21,7 +18,15 @@ public interface CommentMapper {
     @Select("select * from comment where id = #{id}")
     Comment selectById(Long id);
 
-    //按时间倒序查询
+    //根据问题id查找评论 按时间倒序查询
     @Select("select * from comment where parent_id = #{parentId} order by gmt_modified desc")
     List<Comment> findByQuestionId(@Param("parentId") Long questionId);
+
+    //根据评论id查找二级评论
+    @Select("select * from comment where parent_id = #{parentId} and type = 2 order by gmt_modified desc")
+    List<Comment> findByCommentId(@Param("parentId") Long commentId);
+
+    //更新子评论数
+    @Update("update comment set comment_count = comment_count + 1 where id = #{id}")
+    void increase2CommentCounnt(@Param("id") Long parentId);
 }

@@ -11,7 +11,9 @@ import lombok.Data;
 //CommentClickDTO 点击评论时传递的评论内容
 @Data
 public class CommentClickDTO {
+    //文章的id
     private Long parentId;
     private String content;
+    //评论的类型 1是对文章的评论
     private Integer type;
 }

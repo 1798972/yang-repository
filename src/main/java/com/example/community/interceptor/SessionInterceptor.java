@@ -21,23 +21,24 @@ import javax.servlet.http.HttpServletResponse;
 public class SessionInterceptor implements HandlerInterceptor {
     @Autowired
     UserMapper userMapper;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-       //用户的session处理
+        //用户的session处理
         //1.获取cookies
         Cookie[] cookies = request.getCookies();
-        if (cookies!=null){
+        if (cookies != null) {
             for (Cookie cookie : cookies) {
                 //2.遍历cookies 找到名为token的cookie
-                if("token".equals(cookie.getName())){
+                if ("token".equals(cookie.getName())) {
                     String token = cookie.getValue();
                     //3.根据token 找到user
                     User user = userMapper.findByToken(token);
-                    if (user != null){
+                    if (user != null) {
                         //4.如果user存在 就在session中存入user
-                        if (request.getSession().getAttribute("user")==null){
-                            request.getSession().setAttribute("user",user);
+                        if (request.getSession().getAttribute("user") == null) {
+                            request.getSession().setAttribute("user", user);
                         }
                     }
                     break;

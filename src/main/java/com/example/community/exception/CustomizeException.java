@@ -19,8 +19,8 @@ public class CustomizeException extends RuntimeException {
 //    }
 
     //2.传递的是个枚举
-    public CustomizeException(ICustomizeErrorCode errorCode){
-        this.message =  errorCode.getMessage();
+    public CustomizeException(ICustomizeErrorCode errorCode) {
+        this.message = errorCode.getMessage();
         this.code = errorCode.getCode();
     }
 

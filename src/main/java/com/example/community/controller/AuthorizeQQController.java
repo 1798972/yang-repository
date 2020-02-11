@@ -42,9 +42,9 @@ public class AuthorizeQQController {
 
     //回传http://www.yang37.cn/qqcallback?code=DA90B4981C73FFE7395998F0FE775BFC&state=1
     @RequestMapping("/qqcallback")
-    public String qqLogin(@RequestParam("code")String code,
+    public String qqLogin(@RequestParam("code") String code,
                           @RequestParam(name = "state") String state,
-                          HttpServletResponse response){
+                          HttpServletResponse response) {
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setCode(code);
         accessTokenDTO.setState(state);
@@ -57,9 +57,9 @@ public class AuthorizeQQController {
         //根据token获取openID
         String openId = qqProvider.getOpenId(accessToken);
         //根据openID得到QQ用户
-        QQUser qqUser = qqProvider.getQQUser(openId,accessToken,accessTokenDTO);
+        QQUser qqUser = qqProvider.getQQUser(openId, accessToken, accessTokenDTO);
 
-        if(qqUser!=null){
+        if (qqUser != null) {
             //qq用户存在 为网站用户设置信息
             User user = new User();
             String token = UUID.randomUUID().toString();
@@ -69,9 +69,9 @@ public class AuthorizeQQController {
             user.setAvatarUrl(qqUser.getFigureurl2());
             //得到用户 判断用户是否存在
             userService.insertOrUpdate(user);
-            response.addCookie(new Cookie("token",token));
+            response.addCookie(new Cookie("token", token));
             return "redirect:/";
-        }else {
+        } else {
             System.out.println("登录失败！！");
             return "redirect:/";
         }

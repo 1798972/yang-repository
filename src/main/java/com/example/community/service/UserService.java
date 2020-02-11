@@ -13,13 +13,13 @@ public class UserService {
     public void insertOrUpdate(User user) {
         //根据AccountId查找到的数据库中的dbUser
         User dbUser = userMapper.finfByAccountId(user.getAccountId());
-        if(dbUser == null){
-        //1.数据库中没有 插入
+        if (dbUser == null) {
+            //1.数据库中没有 插入
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             userMapper.insert(user);
-        }else {
-        //2.数据库中有 更新
+        } else {
+            //2.数据库中有 更新
             dbUser.setGmtModified(System.currentTimeMillis());
             dbUser.setAvatarUrl(user.getAvatarUrl());
             dbUser.setName(user.getName());

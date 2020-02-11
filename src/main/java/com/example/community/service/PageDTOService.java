@@ -29,12 +29,12 @@ public class PageDTOService {
 
 
         //1.计算总页数
-        int flag = totalCount/size;  //flag = 0/5
+        int flag = totalCount / size;  //flag = 0/5
         //若刚好整除 则总页数不变
-        if (totalCount%size == 0){
+        if (totalCount % size == 0) {
             pageInfoDTO.setTotalPage(flag);
-        }else {
-            pageInfoDTO.setTotalPage(flag+1);
+        } else {
+            pageInfoDTO.setTotalPage(flag + 1);
         }
 //        System.out.println(pageInfoDTO.getTotalPage());
         //2.设置当前页面
@@ -44,45 +44,45 @@ public class PageDTOService {
         pages.add(page);
 
         //4.设置前面显示3页 后面显示3页
-            //以当前第五页为例 234 5 678
-            //page是当前页面
+        //以当前第五页为例 234 5 678
+        //page是当前页面
         for (int i = 1; i <= 3; i++) {
             //头部加不加
-            if (page - i > 0){
-                pages.add(0,page-i);
+            if (page - i > 0) {
+                pages.add(0, page - i);
             }
             //尾部加不加
-            if (page + i <= pageInfoDTO.getTotalPage()){
-                pages.add(page+i);
+            if (page + i <= pageInfoDTO.getTotalPage()) {
+                pages.add(page + i);
             }
         }
 
         //5.添加所有页的页码
         pageInfoDTO.setHasPages(pages);
 
-        if(totalCount == 0){
+        if (totalCount == 0) {
 //            pageInfoDTO.setShowFirstPage(false);
 //            pageInfoDTO.setShowEndpage(false);
 //            pageInfoDTO.setShowNextPage(false);
 //            pageInfoDTO.setShowPrePage(false);
             pageInfoDTO.setQuestions(null);
-        }else {
+        } else {
             //6.是否显示前一页
             //默认值是false 不是第一页的话就要显示呗
-            if(page != 1){
+            if (page != 1) {
                 pageInfoDTO.setShowPrePage(true);
             }
             //是否显示最后一页
-            if (page != pageInfoDTO.getTotalPage()){
+            if (page != pageInfoDTO.getTotalPage()) {
                 pageInfoDTO.setShowNextPage(true);
             }
 
             //7.是否显示第一页
-            if (pages.contains(1) != true){  //不包含第一页就显示呗
+            if (pages.contains(1) != true) {  //不包含第一页就显示呗
                 pageInfoDTO.setShowFirstPage(true);
             }
             //是否显示最后一页
-            if (pages.contains(pageInfoDTO.getTotalPage()) != true){
+            if (pages.contains(pageInfoDTO.getTotalPage()) != true) {
                 pageInfoDTO.setShowEndpage(true);
             }
         }

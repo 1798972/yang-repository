@@ -18,6 +18,7 @@ import org.springframework.web.servlet.theme.ThemeChangeInterceptor;
 public class WebConfig implements WebMvcConfigurer {
     @Autowired
     SessionInterceptor sessionInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(sessionInterceptor).addPathPatterns("/**");

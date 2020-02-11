@@ -11,12 +11,12 @@ import org.springframework.stereotype.Component;
 public class QQProvider {
 
     //1.得到QQ用户的token
-    public String getQQAccessToken(AccessTokenDTO accessTokenDTO){
+    public String getQQAccessToken(AccessTokenDTO accessTokenDTO) {
         String appid = accessTokenDTO.getClient_id();
         String appkey = accessTokenDTO.getClient_secret();
         String redirectURI = accessTokenDTO.getRedirect_uri();
         String code = accessTokenDTO.getCode();
-        String asStr ="https://graph.qq.com/oauth2.0/token?grant_type=authorization_code&client_id="+appid+"&client_secret="+appkey+"&redirect_uri="+redirectURI+"&code="+code;
+        String asStr = "https://graph.qq.com/oauth2.0/token?grant_type=authorization_code&client_id=" + appid + "&client_secret=" + appkey + "&redirect_uri=" + redirectURI + "&code=" + code;
 
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
@@ -28,9 +28,9 @@ public class QQProvider {
                 .build();
         try {
             Response response = client.newCall(request).execute();
-            String string =  response.body().string();
+            String string = response.body().string();
 //            access_token=0A75E58421FF7A72A50AECF6C5483689&expires_in=7776000&refresh_token=A9BA2A4FE54DCD51B5E16BADDE5C316E
-            String token =  string.split("&")[0].split("=")[1];
+            String token = string.split("&")[0].split("=")[1];
             return token;
         } catch (Exception e) {
             e.printStackTrace();
@@ -39,7 +39,7 @@ public class QQProvider {
     }
 
     //2.根据token获取openID
-    public String getOpenId(String accessToken){
+    public String getOpenId(String accessToken) {
         String openStr = "https://graph.qq.com/oauth2.0/me?access_token=" + accessToken;
 
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
@@ -53,7 +53,7 @@ public class QQProvider {
                 .build();
         try {
             @Data
-            class QQCallBackDTO{
+            class QQCallBackDTO {
                 private String clientId;
                 private String openId;
             }
@@ -71,10 +71,9 @@ public class QQProvider {
     }
 
     //3.根据openId得到QQ用户信息
-    public QQUser getQQUser(String openId,String access_token,AccessTokenDTO accessTokenDTO)
-    {
+    public QQUser getQQUser(String openId, String access_token, AccessTokenDTO accessTokenDTO) {
         String appid = accessTokenDTO.getClient_id();
-        String userStr ="https://graph.qq.com/user/get_user_info?access_token=" + access_token+"&oauth_consumer_key=" + appid + "&openid=" + openId;
+        String userStr = "https://graph.qq.com/user/get_user_info?access_token=" + access_token + "&oauth_consumer_key=" + appid + "&openid=" + openId;
 
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
@@ -88,7 +87,7 @@ public class QQProvider {
             Response response = client.newCall(request).execute();
             String string = response.body().string();
             //json字符串转实体对象
-            QQUser qqUser = JSON.parseObject(string,QQUser.class);
+            QQUser qqUser = JSON.parseObject(string, QQUser.class);
             return qqUser;
         } catch (Exception e) {
             e.printStackTrace();

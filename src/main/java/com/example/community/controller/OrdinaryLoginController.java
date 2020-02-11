@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class OrdinaryLoginController {
     @GetMapping("/ordinarylogin")
-    public String userLogin(){
+    public String userLogin() {
         return "ordinarylogin";
     }
 }
