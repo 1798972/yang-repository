@@ -2,12 +2,16 @@ package com.example.community.service;
 
 import com.example.community.dto.CommentDTO;
 import com.example.community.enums.CommentTypeEnums;
+import com.example.community.enums.NotificationStatusEnums;
+import com.example.community.enums.NotificationTypeEnums;
 import com.example.community.exception.CustomizeErrorCode;
 import com.example.community.exception.CustomizeException;
 import com.example.community.mapper.CommentMapper;
+import com.example.community.mapper.NotificationMapper;
 import com.example.community.mapper.QuestionMapper;
 import com.example.community.mapper.UserMapper;
 import com.example.community.model.Comment;
+import com.example.community.model.Notification;
 import com.example.community.model.Question;
 import com.example.community.model.User;
 import org.springframework.beans.BeanUtils;
@@ -35,6 +39,8 @@ public class CommentService {
     private CommentMapper commentMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private NotificationMapper notificationMapper;
 
     @Transactional
     public void insert(Comment comment) {
@@ -47,8 +53,8 @@ public class CommentService {
             throw new CustomizeException(CustomizeErrorCode.TYPE_PARAM_WRONG);
         }
 
+        //回复的是评论
         if (comment.getType() == CommentTypeEnums.COMMENT.getType()) {
-            //回复的是评论
             //重构方法后好像都是parentId了
             Comment dbComment = commentMapper.selectById(comment.getParentId());
             if (dbComment == null) {
@@ -62,17 +68,48 @@ public class CommentService {
             parentComment.setId(comment.getParentId());
             parentComment.setCommentCount(1);
             commentMapper.increase2CommentCounnt(parentComment.getId());
+
+            //评论时创建通知
+            createNotify(comment, dbComment);
+
         } else {
-            //回复的是问题
+        //回复的是问题
             Question question = questionMapper.findById(comment.getParentId());
             if (question == null) {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
             commentMapper.insert(comment);
             //评论数加1
-//                question.setCommentCount(1);
+            //question.setCommentCount(1);
             questionMapper.increaseCommentCounnt(comment.getParentId());
+
+            //回复时创建通知
+            Notification notification = new Notification();
+            notification.setGmtCreate(System.currentTimeMillis());
+            notification.setType(NotificationTypeEnums.REPLSY_COMMENT.getType());
+            notification.setOuterId(comment.getParentId());
+            notification.setNotifier(comment.getCommentator());
+            notification.setStatus(NotificationStatusEnums.UNREAD.getStatus());
+            notification.setReceiver(question.getCreator());
+            notificationMapper.insert(notification);
         }
+    }
+
+    private void createNotify(Comment comment, Comment dbComment) {
+        //对通知的操作
+        Notification notification = new Notification();
+        notification.setGmtCreate(System.currentTimeMillis());
+        notification.setType(NotificationTypeEnums.REPLSY_COMMENT.getType());
+        //回复在哪个东西上的？这里是评论，所以这条通知就会显示
+        //  xx 回复了评论 xx
+        //需要传递的是评论的id 所以是 子评论.getParentId()
+        notification.setOuterId(comment.getParentId());
+        //评论人
+        notification.setNotifier(comment.getCommentator());
+        notification.setStatus(NotificationStatusEnums.UNREAD.getStatus());
+        //接收者 父评论的发起者
+        notification.setReceiver(dbComment.getCommentator());
+        notificationMapper.insert(notification);
     }
 
     //根据问题id找到所有评论

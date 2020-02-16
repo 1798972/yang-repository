@@ -25,7 +25,7 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
-    //对文章的评论
+    //对文章的评论 在ajax操作中指定了类型
     //ResponseBody用于对象格式转换
     //对于Controller方法返回的对象，转换为指定格式的数据如：json,xml等，通过Response响应给客户端。
     @ResponseBody

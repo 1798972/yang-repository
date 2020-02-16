@@ -14,6 +14,6 @@ public class CommentClickDTO {
     //文章的id
     private Long parentId;
     private String content;
-    //评论的类型 1是对文章的评论
+    //1是对文章的评论 2是对评论的评论
     private Integer type;
 }
