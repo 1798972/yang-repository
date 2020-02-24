@@ -8,8 +8,8 @@ package com.example.community.enums;
 
 //枚举的使用
 public enum NotificationTypeEnums {
-    REPLAY_QUESTION(1,"回复了问题"),
-    REPLSY_COMMENT(2,"回复了评论");
+    REPLAY_QUESTION(1,"回复了你的问题"),
+    REPLSY_COMMENT(2,"回复了你的评论");
 
     private int type;
     private String name;
@@ -25,5 +25,14 @@ public enum NotificationTypeEnums {
     NotificationTypeEnums(int type, String name) {
         this.type = type;
         this.name = name;
+    }
+
+    public static String nameOfType(int type){
+        for (NotificationTypeEnums notificationTypeEnum : NotificationTypeEnums.values()) {
+            if (notificationTypeEnum.getType() == type){
+                return notificationTypeEnum.getName();
+            }
+        }
+        return "";
     }
 }

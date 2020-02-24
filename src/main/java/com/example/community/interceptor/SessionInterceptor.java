@@ -2,6 +2,7 @@ package com.example.community.interceptor;
 
 import com.example.community.mapper.UserMapper;
 import com.example.community.model.User;
+import com.example.community.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -21,6 +22,8 @@ import javax.servlet.http.HttpServletResponse;
 public class SessionInterceptor implements HandlerInterceptor {
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    NotificationService notificationService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -37,9 +40,10 @@ public class SessionInterceptor implements HandlerInterceptor {
                     User user = userMapper.findByToken(token);
                     if (user != null) {
                         //4.如果user存在 就在session中存入user
-                        if (request.getSession().getAttribute("user") == null) {
                             request.getSession().setAttribute("user", user);
-                        }
+                            //在session中存入通知信息
+                            Long unreadMessage = notificationService.unReadCount(user.getId());
+                            request.getSession().setAttribute("unreadMessage",unreadMessage);
                     }
                     break;
                 }

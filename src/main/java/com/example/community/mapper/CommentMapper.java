@@ -29,4 +29,12 @@ public interface CommentMapper {
     //更新子评论数
     @Update("update comment set comment_count = comment_count + 1 where id = #{id}")
     void increase2CommentCounnt(@Param("id") Long parentId);
+
+    //找到父级id
+    @Select("select parent_id from comment where id = #{id}")
+    Long findParentId(Long parentId);
+
+    //找到父级评论的内容
+    @Select("select content from comment where id = #{id}")
+    String findParentCommentContent(Long parentId);
 }

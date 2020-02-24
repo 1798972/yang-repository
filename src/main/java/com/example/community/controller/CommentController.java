@@ -38,6 +38,9 @@ public class CommentController {
         //$.ajax(
         //       success:function (response)
         //       ）中做处理
+
+
+        //未登录
         if (user == null) {
             return ResultDTO.errorOf(CustomizeErrorCode.NOT_LOGIN);
         }
@@ -57,7 +60,9 @@ public class CommentController {
         comment.setCommentator(user.getId());
         comment.setLikeCount(0);
 
-        commentService.insert(comment);
+        //完成评论的插入操作
+        commentService.insert(comment,user);
+
         return ResultDTO.okOf();
     }
 

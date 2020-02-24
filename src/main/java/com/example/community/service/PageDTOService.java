@@ -65,7 +65,7 @@ public class PageDTOService {
 //            pageInfoDTO.setShowEndpage(false);
 //            pageInfoDTO.setShowNextPage(false);
 //            pageInfoDTO.setShowPrePage(false);
-            pageInfoDTO.setQuestions(null);
+            pageInfoDTO.setData(null);
         } else {
             //6.是否显示前一页
             //默认值是false 不是第一页的话就要显示呗

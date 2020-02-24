@@ -43,7 +43,7 @@ public class CommentService {
     private NotificationMapper notificationMapper;
 
     @Transactional
-    public void insert(Comment comment) {
+    public void insert(Comment comment, User commentUser) {
         if (comment.getParentId() == null || comment.getParentId() == 0) {
 
             //CustomizeExceptionHandler中做处理
@@ -55,7 +55,7 @@ public class CommentService {
 
         //回复的是评论
         if (comment.getType() == CommentTypeEnums.COMMENT.getType()) {
-            //重构方法后好像都是parentId了
+            //父级评论
             Comment dbComment = commentMapper.selectById(comment.getParentId());
             if (dbComment == null) {
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
@@ -69,11 +69,22 @@ public class CommentService {
             parentComment.setCommentCount(1);
             commentMapper.increase2CommentCounnt(parentComment.getId());
 
+            Long parentId = commentMapper.findParentId(comment.getParentId());
+            //如果是评论 在通知时要查找的问题:评论的父级评论对应的问题id
+            Question targetQuestion = questionMapper.findById(parentId);
+            if (targetQuestion == null) {
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
+
+            //查找父级评论的内容
+            String outerTitle = commentMapper.findParentCommentContent(comment.getParentId());
+
             //评论时创建通知
-            createNotify(comment, dbComment);
+            createNotify(comment, dbComment.getCommentator(), commentUser.getName(), outerTitle, NotificationTypeEnums.REPLSY_COMMENT, targetQuestion.getId());
 
         } else {
         //回复的是问题
+            //父级问题
             Question question = questionMapper.findById(comment.getParentId());
             if (question == null) {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
@@ -83,32 +94,25 @@ public class CommentService {
             //question.setCommentCount(1);
             questionMapper.increaseCommentCounnt(comment.getParentId());
 
-            //回复时创建通知
-            Notification notification = new Notification();
-            notification.setGmtCreate(System.currentTimeMillis());
-            notification.setType(NotificationTypeEnums.REPLSY_COMMENT.getType());
-            notification.setOuterId(comment.getParentId());
-            notification.setNotifier(comment.getCommentator());
-            notification.setStatus(NotificationStatusEnums.UNREAD.getStatus());
-            notification.setReceiver(question.getCreator());
-            notificationMapper.insert(notification);
+            //回复问题时创建通知
+            createNotify(comment,question.getCreator(), commentUser.getName(), question.getTitle(), NotificationTypeEnums.REPLAY_QUESTION, question.getId());
         }
     }
 
-    private void createNotify(Comment comment, Comment dbComment) {
+    private void createNotify(Comment comment, Long receiver, String notifierName, String outerTitle, NotificationTypeEnums notificationType, Long outerId) {
         //对通知的操作
         Notification notification = new Notification();
         notification.setGmtCreate(System.currentTimeMillis());
-        notification.setType(NotificationTypeEnums.REPLSY_COMMENT.getType());
-        //回复在哪个东西上的？这里是评论，所以这条通知就会显示
-        //  xx 回复了评论 xx
-        //需要传递的是评论的id 所以是 子评论.getParentId()
-        notification.setOuterId(comment.getParentId());
+        notification.setType(notificationType.getType());
+        //父评论的id
+        notification.setOuterId(outerId);
         //评论人
         notification.setNotifier(comment.getCommentator());
         notification.setStatus(NotificationStatusEnums.UNREAD.getStatus());
-        //接收者 父评论的发起者
-        notification.setReceiver(dbComment.getCommentator());
+        //接收者
+        notification.setReceiver(receiver);
+        notification.setNotifierName(notifierName);
+        notification.setOuterTitle(outerTitle);
         notificationMapper.insert(notification);
     }
 

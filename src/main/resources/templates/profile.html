@@ -20,9 +20,11 @@
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
             <h3><span th:text="${sectionName}"></span></h3>
             <hr>
+            <!--如果是我的问题-->
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:if="${section=='questions'}">
             <!--循环文章列表 得到每一个文章-->
-            <div class="media" th:if="${userPageinfo.questions != null}"
-                 th:each="questionDTO : ${userPageinfo.questions}">
+            <div class="media" th:if="${userPageinfo.data != null}"
+                 th:each="questionDTO : ${userPageinfo.data}">
                 <div class="media-left">
                     <a href="#">
                         <img class="media-object img-rounded avatar-icon"
@@ -42,10 +44,12 @@
                     </span>
                 </div>
             </div>
+            </div>
 
-            <!--分页显示-->
-            <div th:if="${userPageinfo.questions.isEmpty()}==true" th:text="您的问题列表为空，快去发布问题吧！"></div>
-            <nav aria-label="Page navigation" th:if="${userPageinfo.questions.isEmpty()}!=true">
+            <!--分页1-->
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:if="${section=='questions'}">
+                <div th:if="${userPageinfo.data.isEmpty()}==true" th:text="您的问题列表为空,快去发布问题吧!"></div>
+            <nav aria-label="Page navigation" th:if="${userPageinfo.data.isEmpty()}!=true">
                 <ul class="pagination">
                     <!--第一页-->
                     <li th:if="${userPageinfo.showFirstPage}">
@@ -81,6 +85,80 @@
             </nav>
         </div>
 
+            <!--如果是我的通知-->
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:if="${section=='replies'}">
+                <div class="media" th:if="${notificationPageDTO.data != null}"
+                     th:each="notificationDTO : ${notificationPageDTO.data}">
+                    <div class="media-body">
+                        <p class="media-heading">
+                            <!--xx 回复了你的评论/问题-->
+                            <span th:text="${notificationDTO.notifierName + '  '}">
+                            </span>
+                            <span th:data-id="${notificationDTO.id}" th:text="${notificationDTO.typeName}"></span>
+                            <!--评论/问题 这两个字用js设置下样式-->
+                            <span id="pl" style="display: none">回复了你的<b><span th:text="评论" style="color: rebeccapurple"></span></b></span>
+                            <span id="wt" style="display: none">回复了你的<b><span th:text="问题" style="color: #eb9316"></span></b></span>
+                            <script>
+                               /*var content = $("#data-id").text();
+                               /!*包含评论两个字就是评论*!/
+                               if (content.indexOf("评论") != -1){
+                                   $("#notificationContent").hide();
+                                   $("#pl").show();
+                               }else {
+                                   $("#notificationContent").hide();
+                                   $("#wt").show();
+                               }*/
+                            </script>
+
+                            <!--后面的是问题名字/评论名字 都会跳转到对应的id上-->
+                            <a th:href="@{/notification/{notificationId} (notificationId=${notificationDTO.id})}"
+                               th:text="${notificationDTO.outerTitle}"></a>
+                            <span class="label label-danger" th:if="${notificationDTO.status} == 0">未读</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!--分页2-->
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:if="${section=='replies'}">
+                <div th:if="${notificationPageDTO.data.isEmpty()}==true" th:text="没有人回复你？去发布些问题吧!"></div>
+                <nav aria-label="Page navigation" th:if="${notificationPageDTO.data.isEmpty()}!=true">
+                    <ul class="pagination">
+                        <!--第一页-->
+                        <li th:if="${notificationPageDTO.showFirstPage}">
+                            <a th:href="@{'/profile/'+${section}(page=${1})}" aria-label="Previous">
+                                <span aria-hidden="true">&lt;&lt;</span>
+                            </a>
+                        </li>
+                        <!--上一页-->
+                        <li th:if="${notificationPageDTO.showPrePage}">
+                            <!--为啥减法就不行？-->
+                            <!--<a th:href="@{'/profile/'+${section}(page=${userPageinfo.getNowPage()-1})}" aria-label="Previous">-->
+                            <a th:href="@{'/profile/'+${section}(page=${(notificationPageDTO.nowPage)-1})}" aria-label="Previous">
+                                <span aria-hidden="true">&lt;</span>
+                            </a>
+                        </li>
+                        <!--当前页-->
+                        <li th:class="${notificationPageDTO.nowPage==page}?'active':''" th:each="page : ${notificationPageDTO.hasPages}">
+                            <a th:href="@{'/profile/'+${section}(page=${page})}" th:text="${page}"></a>
+                        </li>
+                        <!--下一页-->
+                        <li th:if="${notificationPageDTO.showNextPage}">
+                            <a th:href="@{'/profile/'+${section}(page=${notificationPageDTO.nowPage+1})}" aria-label="Next">
+                                <span aria-hidden="true">&gt;</span>
+                            </a>
+                        </li>
+                        <!--最后一页-->
+                        <li th:if="${notificationPageDTO.showEndpage}">
+                            <a th:href="@{'/profile/'+${section}(page=${notificationPageDTO.totalPage})}" aria-label="Previous">
+                                <span aria-hidden="true">&gt;&gt;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+    </div>
+
         <!--右侧的选择便签栏-->
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <div class="list-group section">
@@ -88,7 +166,7 @@
                    th:class="${section=='questions'} ? 'list-group-item active' : 'list-group-item' ">我的问题</span></a>
                 <a href="/profile/replies"
                    th:class="${section=='replies'} ? 'list-group-item active' : 'list-group-item' ">最新回复<span
-                        class="badge">14</span></a>
+                        class="badge" th:text="${session.unreadMessage}"></span></a>
             </div>
         </div>
     </div>

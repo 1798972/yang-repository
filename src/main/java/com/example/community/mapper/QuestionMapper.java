@@ -1,6 +1,5 @@
 package com.example.community.mapper;
 
-import com.example.community.dto.QuestionDTO;
 import com.example.community.model.Question;
 import org.apache.ibatis.annotations.*;
 
@@ -8,9 +7,9 @@ import java.util.List;
 
 @Mapper
 public interface QuestionMapper {
+    //0.插入一条问题
     @Insert("insert into questions (title,description,gmt_create,gmt_modified,creator,tag) values (#{title},#{description},#{gmtCreate},#{gmtModified},#{creator},#{tag})")
     void createQuestion(Question question);
-
 
     //1.查询所有问题
     @Select("select * from questions order by id desc limit #{offset},#{size}")

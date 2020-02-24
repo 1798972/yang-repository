@@ -28,7 +28,7 @@
             <h3><span class="glyphicon glyphicon-th-list">文章列表</span></h3>
             <hr>
             <!--循环文章列表 得到每一个文章-->
-            <div class="media" th:if="${pageInfo.questions != null}" th:each="questionDTO : ${pageInfo.questions}">
+            <div class="media" th:if="${pageInfo.data != null}" th:each="questionDTO : ${pageInfo.data}">
                 <div class="media-left">
                     <a href="#">
                         <img class="media-object img-rounded avatar-icon"
@@ -51,7 +51,7 @@
             </div>
 
             <!--分页显示-->
-            <nav aria-label="Page navigation" th:if="${pageInfo.questions != null}">
+            <nav aria-label="Page navigation" th:if="${pageInfo.data != null}">
                 <ul class="pagination">
                     <!--第一页-->
                     <li th:if="${pageInfo.showFirstPage}">

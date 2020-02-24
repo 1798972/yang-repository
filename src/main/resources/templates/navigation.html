@@ -20,7 +20,7 @@
             </form>
             <ul class="nav navbar-nav navbar-right">
                 <li ><a href="/csid">城市id</a></li>
-                <li th:if="${session.user != null}"><a href="/profile/replies">消息<span class="badge" style="background: red">15</span></a></li>
+                <li th:if="${session.user != null}"><a href="/profile/replies">通知<span class="badge" style="background: red" th:text="${session.unreadMessage}"></span></a></li>
                 <li th:if="${session.user != null}"><a href="/publish">提问</a></li>
                 <!--不为空-->
                 <li class="dropdown" th:if="${session.user != null}">
@@ -57,7 +57,7 @@
                 </li>
                 <!--            <li th:if="${session.user == null}">
                                     &lt;!&ndash;注意回调地址http没有s
-                                    <a href="https://github.com/login/oauth/authorize?client_id=f0b690e1af8e644032f9&http://localhost:8089/callback&scope=user&state=1">登录</a>
+                                    <a href="https://github.com/login/oauth/authorize?client_id=bb4fec2d66add24b4c31&http://134.175.28.168/callback&scope=user&state=1">登录</a>
                                 </li>-->
             </ul>
 

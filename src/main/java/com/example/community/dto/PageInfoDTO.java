@@ -11,10 +11,10 @@ import java.util.List;
  * @Date: Create in 19:15 2019/11/13
  */
 @Data
-public class PageInfoDTO {
+public class PageInfoDTO<T> {
     //PageInfoDTO对象
     //包含 问题列表信息 页码信息 等
-    private List<QuestionDTO> questions;
+    private List<T> data;
     private boolean showFirstPage;  //默认值false
     private boolean showPrePage;
     private boolean showNextPage;
