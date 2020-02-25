@@ -8,8 +8,8 @@ package com.example.community.enums;
 
 //枚举的使用
 public enum NotificationTypeEnums {
-    REPLAY_QUESTION(1,"回复了你的问题"),
-    REPLSY_COMMENT(2,"回复了你的评论");
+    REPLAY_QUESTION(1,"问题"),
+    REPLSY_COMMENT(2,"评论");
 
     private int type;
     private String name;

@@ -1,16 +1,16 @@
 package com.example.community.interceptor;
 
-import com.example.community.mapper.UserMapper;
-import com.example.community.model.User;
-import com.example.community.service.NotificationService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
+        import com.example.community.mapper.UserMapper;
+        import com.example.community.model.User;
+        import com.example.community.service.NotificationService;
+        import org.springframework.beans.factory.annotation.Autowired;
+        import org.springframework.stereotype.Service;
+        import org.springframework.web.servlet.HandlerInterceptor;
+        import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+        import javax.servlet.http.Cookie;
+        import javax.servlet.http.HttpServletRequest;
+        import javax.servlet.http.HttpServletResponse;
 
 /**
  * @Author: Yiang37
@@ -40,10 +40,10 @@ public class SessionInterceptor implements HandlerInterceptor {
                     User user = userMapper.findByToken(token);
                     if (user != null) {
                         //4.如果user存在 就在session中存入user
-                            request.getSession().setAttribute("user", user);
-                            //在session中存入通知信息
-                            Long unreadMessage = notificationService.unReadCount(user.getId());
-                            request.getSession().setAttribute("unreadMessage",unreadMessage);
+                        request.getSession().setAttribute("user", user);
+                        //在session中存入通知信息
+                        Long unreadMessage = notificationService.unReadCount(user.getId());
+                        request.getSession().setAttribute("unreadMessage",unreadMessage);
                     }
                     break;
                 }

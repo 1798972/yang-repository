@@ -93,6 +93,18 @@
             <optional>true</optional>
             <scope>true</scope>
         </dependency>
+
+        <!--腾讯云COS-->
+        <dependency>
+            <groupId>com.tencentcloudapi</groupId>
+            <artifactId>tencentcloud-sdk-java</artifactId>
+            <version>3.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.qcloud</groupId>
+            <artifactId>cos_api</artifactId>
+            <version>5.4.9</version>
+        </dependency>
     </dependencies>
 
     <build>

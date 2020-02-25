@@ -41,7 +41,9 @@
                         <!-- th:href="@{'/question/'+${questionDTO.id}}-->
                         <a th:href="@{/question/{questionId} (questionId=${questionDTO.id})}"
                            th:text="${questionDTO.title}"></a></h4>
-                    <span th:text="${questionDTO.description}"></span><br>
+                    <!--文章内容 设置其显示长度-->
+                    <!--<span th:text="${questionDTO.description}"></span><br>-->
+                    <span th:text="${#strings.abbreviate(questionDTO.description,50)}"></span><br>
                     <span class="text">
                         <span th:text="${questionDTO.commentCount}"></span>回复/
                         <span th:text="${questionDTO.viewCount}"></span>浏览/

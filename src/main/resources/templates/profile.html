@@ -92,24 +92,12 @@
                     <div class="media-body">
                         <p class="media-heading">
                             <!--xx 回复了你的评论/问题-->
-                            <span th:text="${notificationDTO.notifierName + '  '}">
+                            <span th:text="${notificationDTO.notifierName +'  回复了你的'}">
                             </span>
-                            <span th:data-id="${notificationDTO.id}" th:text="${notificationDTO.typeName}"></span>
-                            <!--评论/问题 这两个字用js设置下样式-->
-                            <span id="pl" style="display: none">回复了你的<b><span th:text="评论" style="color: rebeccapurple"></span></b></span>
-                            <span id="wt" style="display: none">回复了你的<b><span th:text="问题" style="color: #eb9316"></span></b></span>
-                            <script>
-                               /*var content = $("#data-id").text();
-                               /!*包含评论两个字就是评论*!/
-                               if (content.indexOf("评论") != -1){
-                                   $("#notificationContent").hide();
-                                   $("#pl").show();
-                               }else {
-                                   $("#notificationContent").hide();
-                                   $("#wt").show();
-                               }*/
-                            </script>
-
+                            <!--评论/问题 这两个字设置下样式-->
+                            <!-- <b><span th:text="${notificationDTO.typeName}"></span></b>-->
+                            <b><span th:if="${#strings.containsIgnoreCase(notificationDTO.typeName,'评论')}" style="color: rebeccapurple">评论</span></b>
+                            <b><span th:if="${#strings.containsIgnoreCase(notificationDTO.typeName,'问题')}" style="color: #eb9316">问题</span></b>
                             <!--后面的是问题名字/评论名字 都会跳转到对应的id上-->
                             <a th:href="@{/notification/{notificationId} (notificationId=${notificationDTO.id})}"
                                th:text="${notificationDTO.outerTitle}"></a>
