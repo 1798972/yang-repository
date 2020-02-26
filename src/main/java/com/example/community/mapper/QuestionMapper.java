@@ -53,4 +53,12 @@ public interface QuestionMapper {
     //10.查询相关问题
     @Select("select * from questions where id != #{id} and tag regexp #{tag}")
     List<Question> findAboutQuestions(@Param("id")Long id,@Param("tag")String regTag);
+
+    //11.查询搜索后的问题总条数
+    @Select("select count(*) from questions where title regexp #{search}")
+    Integer selectQuestionQueryCounts(String search);
+
+    //12.查询搜索后的问题列表
+    @Select("select * from questions where title regexp #{search} order by id desc limit #{offset},#{size} ")
+    List<Question> getQuestionQueryList(@Param("offset")Integer offset,@Param("size") Integer size, @Param("search") String search);
 }

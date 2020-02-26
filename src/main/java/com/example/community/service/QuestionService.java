@@ -8,6 +8,7 @@ import com.example.community.mapper.QuestionMapper;
 import com.example.community.mapper.UserMapper;
 import com.example.community.model.Question;
 import com.example.community.model.User;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,13 +27,19 @@ public class QuestionService {
     private PageDTOService pageDTOService;
 
     //1.每页的问题列表
-    public PageInfoDTO getQuestionDTOList(Integer page, Integer size) {
-        PageInfoDTO pageInfoDTO = new PageInfoDTO();
-
-
-        //.查询总页数
-        Integer totalCount = questionMapper.selectQuestionCounts();
-        //.设置页面信息
+    public PageInfoDTO getQuestionDTOList(Integer page, Integer size, String search) {
+        PageInfoDTO pageInfoDTO;
+        Integer totalCount;
+        //对传入的search进行替换
+        if (StringUtils.isNotBlank(search)){
+            //如果搜索信息不为空 则是搜索操作 替换成正则
+            String regsearch = search.replace(' ','|');
+             totalCount = questionMapper.selectQuestionQueryCounts(regsearch);
+        }else {
+            //为空就是没有进行搜索 返回默认的
+            totalCount = questionMapper.selectQuestionCounts();
+        }
+        //设置页面信息
         pageInfoDTO = pageDTOService.setAllPageInfo(totalCount, page, size);
 
         //页面范围在[1,总页数]
@@ -48,9 +55,16 @@ public class QuestionService {
         //注意页数为0时的判断
         Integer offset = page < 1 ? 0 : size * (page - 1);
 
-        //查出所有的question
-        List<Question> questionList = questionMapper.getQuestionList(offset, size);
-        List<QuestionDTO> questionDTOList = new ArrayList<QuestionDTO>();
+        List<Question> questionList = null;
+        if (StringUtils.isNotBlank(search)){
+            String regsearch = search.replace(' ','|');
+            //查询问题总条数
+            questionList = questionMapper.getQuestionQueryList(offset, size, regsearch);
+        }else {
+            questionList = questionMapper.getQuestionList(offset, size);
+        }
+
+        List<QuestionDTO> questionDTOList = new ArrayList<>();
 
         //遍历questionList
         for (Question question : questionList) {
