@@ -42,8 +42,20 @@ function findTodayAllWc() {
                         "<td align='center'>" + data[i].wcyy + "</td>" +
                         "<td align='center'>" + data[i].lwrqAndLwsj + "</td>" +
                         "<td align='center'>" + data[i].wcdzAndWcrqAndWcsj + "</td>" +
+
+                        "<td align='center'>" +" " + "</td>" +
+                        "<td align='center'>" +" " + "</td>" +
+                        "<td align='center'>" +" " + "</td>" +
+
                         "<td align='center'>" + data[i].fxfs + "</td>" +
+
+                        "<td align='center'>" +"无" + "</td>" +
+
                         "<td align='center'>" + data[i].mfsj + "</td>" +
+
+                        "<td align='center'>" +"范清香" + "</td>" +
+                        "<td align='center'>" +"已返回" + "</td>" +
+
                         "</tr>";
                 }
                 $("#myTBody1").html(str);
@@ -87,10 +99,23 @@ function findTodayAllXz() {
                         "<td align='center'>" + data[i].wldzAndFxrqAndFxsj + "</td>" +
                         "<td align='center'>" + data[i].wcyy + "</td>" +
                         "<td align='center'>" + data[i].lwrqAndLwsj + "</td>" +
+
+                        "<td align='center'>" +" " + "</td>" +
+                        "<td align='center'>" +" " + "</td>" +
+                        "<td align='center'>" +" " + "</td>" +
+                        "<td align='center'>" +" " + "</td>" +
+
+                        "<td align='center'>" + data[i].fxfs + "</td>" +
+
+                        "<td align='center'>" +"无" + "</td>" +
+
+                        "<td align='center'>" + data[i].mfsj + "</td>" +
                         "<td align='center'>" + data[i].dcry + "</td>" +
                         "<td align='center'>" + data[i].jtrs + "</td>" +
-                        "<td align='center'>" + data[i].fxfs + "</td>" +
-                        "<td align='center'>" + data[i].mfsj + "</td>" +
+
+                        "<td align='center'>" +"待定" + "</td>" +
+                        "<td align='center'>" +"新增" + "</td>" +
+
                         "</tr>";
                 }
                 $("#myTBody2").html(str);
@@ -134,8 +159,20 @@ function findWcByRq() {
                         "<td align='center'>" + data[i].wcyy + "</td>" +
                         "<td align='center'>" + data[i].lwrqAndLwsj + "</td>" +
                         "<td align='center'>" + data[i].wcdzAndWcrqAndWcsj + "</td>" +
+
+                        "<td align='center'>" +" " + "</td>" +
+                        "<td align='center'>" +" " + "</td>" +
+                        "<td align='center'>" +" " + "</td>" +
+
                         "<td align='center'>" + data[i].fxfs + "</td>" +
+
+                        "<td align='center'>" +"无" + "</td>" +
+
                         "<td align='center'>" + data[i].mfsj + "</td>" +
+
+                        "<td align='center'>" +"范清香" + "</td>" +
+                        "<td align='center'>" +"已返回" + "</td>" +
+
                         "</tr>";
                 }
                 $("#myTBody1").html(str);
@@ -177,10 +214,23 @@ function findXzByRq() {
                         "<td align='center'>" + data[i].wldzAndFxrqAndFxsj + "</td>" +
                         "<td align='center'>" + data[i].wcyy + "</td>" +
                         "<td align='center'>" + data[i].lwrqAndLwsj + "</td>" +
+
+                        "<td align='center'>" +" " + "</td>" +
+                        "<td align='center'>" +" " + "</td>" +
+                        "<td align='center'>" +" " + "</td>" +
+                        "<td align='center'>" +" " + "</td>" +
+
+                        "<td align='center'>" + data[i].fxfs + "</td>" +
+
+                        "<td align='center'>" +"无" + "</td>" +
+
+                        "<td align='center'>" + data[i].mfsj + "</td>" +
                         "<td align='center'>" + data[i].dcry + "</td>" +
                         "<td align='center'>" + data[i].jtrs + "</td>" +
-                        "<td align='center'>" + data[i].fxfs + "</td>" +
-                        "<td align='center'>" + data[i].mfsj + "</td>" +
+
+                        "<td align='center'>" +"待定" + "</td>" +
+                        "<td align='center'>" +"新增" + "</td>" +
+
                         "</tr>";
                 }
                 $("#myTBody2").html(str);
@@ -224,8 +274,20 @@ function findWcByXm() {
                         "<td align='center'>" + data[i].wcyy + "</td>" +
                         "<td align='center'>" + data[i].lwrqAndLwsj + "</td>" +
                         "<td align='center'>" + data[i].wcdzAndWcrqAndWcsj + "</td>" +
+
+                        "<td align='center'>" +" " + "</td>" +
+                        "<td align='center'>" +" " + "</td>" +
+                        "<td align='center'>" +" " + "</td>" +
+
                         "<td align='center'>" + data[i].fxfs + "</td>" +
+
+                        "<td align='center'>" +"无" + "</td>" +
+
                         "<td align='center'>" + data[i].mfsj + "</td>" +
+
+                        "<td align='center'>" +"范清香" + "</td>" +
+                        "<td align='center'>" +"已返回" + "</td>" +
+
                         "</tr>";
                 }
                 $("#myTBody1").html(str);
@@ -268,10 +330,23 @@ function findXzByXm() {
                         "<td align='center'>" + data[i].wldzAndFxrqAndFxsj + "</td>" +
                         "<td align='center'>" + data[i].wcyy + "</td>" +
                         "<td align='center'>" + data[i].lwrqAndLwsj + "</td>" +
+
+                        "<td align='center'>" +" " + "</td>" +
+                        "<td align='center'>" +" " + "</td>" +
+                        "<td align='center'>" +" " + "</td>" +
+                        "<td align='center'>" +" " + "</td>" +
+
+                        "<td align='center'>" + data[i].fxfs + "</td>" +
+
+                        "<td align='center'>" +"无" + "</td>" +
+
+                        "<td align='center'>" + data[i].mfsj + "</td>" +
                         "<td align='center'>" + data[i].dcry + "</td>" +
                         "<td align='center'>" + data[i].jtrs + "</td>" +
-                        "<td align='center'>" + data[i].fxfs + "</td>" +
-                        "<td align='center'>" + data[i].mfsj + "</td>" +
+
+                        "<td align='center'>" +"待定" + "</td>" +
+                        "<td align='center'>" +"新增" + "</td>" +
+
                         "</tr>";
                 }
                 $("#myTBody2").html(str);
