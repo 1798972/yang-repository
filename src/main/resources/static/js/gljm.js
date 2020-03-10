@@ -362,3 +362,49 @@ function findXzByXm() {
         }
     });
 }
+
+//个人查询界面
+function fundWcBySelf() {
+    //存储的 03月6日 所以月要MM
+    var xm = $("#input_srxm").val();
+    $.ajax({
+        url: "/gljm/findWcByXm",
+        data: {
+            "xm": xm
+        },
+        type: "post",
+        datatype: "json",
+        success: function (data) {
+            if (data !== null) {
+                str = "";
+                for (i = 0; i < data.length; i++) {
+                    str += "<tr>" +
+                        "<td align='center'>" + (i + 1) + "</td>" +
+                        "<td align='center'>" + data[i].xm + "</td>" +
+                        "<td align='center'>" + data[i].xb + "</td>" +
+                        "<td align='center'>" + data[i].nl + "</td>" +
+                        "<td align='center' style='mso-number-format:\\@'>" + data[i].sfz + "</td>" +
+                        "<td align='center'>" + data[i].sb + "</td>" +
+                        "<td align='center'>" + data[i].dhh + "</td>" +
+                        "<td align='center'>" + data[i].wldzAndFxrqAndFxsj + "</td>" +
+                        "<td align='center'>" + data[i].wcyy + "</td>" +
+                        "<td align='center'>" + data[i].lwrqAndLwsj + "</td>" +
+                        "<td align='center'>" + data[i].wcdzAndWcrqAndWcsj + "</td>" +
+                        "<td align='center'>" + data[i].fxfs + "</td>" +
+                        "<td align='center'>" + data[i].mfsj + "</td>" +
+                        "</tr>";
+                }
+                $("#myTBody1").html(str);
+                $("#tableDiv2").hide();
+                $("#info_div").hide();
+                $("#tableDiv1").show();
+            }
+            if (data.length === 0) {
+                $("#info_div").show();
+            }
+        },
+        error: function () {
+        }
+    });
+
+}
