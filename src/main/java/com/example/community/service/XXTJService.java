@@ -23,9 +23,8 @@ public class XXTJService {
 
     //查询有没有身份证
     public boolean findSFZ(String sfz) {
-        Total dbTotal = xxtjMapper.findOneTotal(sfz);
-        //没有记录
-        return dbTotal != null;
+        List<Total> dbTotal =  xxtjMapper.findOneTotal(sfz);
+        return dbTotal.size() != 0;
     }
 
     //插入一条外出记录
@@ -38,7 +37,6 @@ public class XXTJService {
             //有的话是做更新
             tempWcjl.setId(dbWcjl.getId());
             xxtjMapper.updateOneWcjl(tempWcjl);
-
             //更新了外出表信息 还要看看新增表信息变不变
         }
         return true;
@@ -48,9 +46,10 @@ public class XXTJService {
     //插入一条新增记录
     public boolean insetOrUpdateOneXzjl(Xzjl tempXzjl) {
         Xzjl dbXzjl = xxtjMapper.findOneXzjl(tempXzjl.getSfz());
-        if (dbXzjl == null){
-            //新增
-            //先计算社别
+        List<Total> totalList = xxtjMapper.findOneTotal(tempXzjl.getSfz());
+
+        if (dbXzjl == null && totalList.size() ==0){
+            //没有且总表无记录 才需要添加新增记录
             String tempSb = tempXzjl.getSb();
             switch (tempSb) {
                 case "先锋村一社":
@@ -72,39 +71,41 @@ public class XXTJService {
                     tempXzjl.setDcry("范清香");
                     break;
             }
-
-
             //总表里插入一个新身份证
             xxtjMapper.insertOneSfzToTotal(tempXzjl.getSfz());
             xxtjMapper.insertOneXzjl(tempXzjl);
             return true;
         }else {
-            //先计算社别
-            String tempSb = tempXzjl.getSb();
-            switch (tempSb) {
-                case "先锋村一社":
-                    tempXzjl.setDcry("谢道福");
-                    break;
-                case "先锋村二社":
-                    tempXzjl.setDcry("杨绍楚");
-                    break;
-                case "先锋村三社":
-                    tempXzjl.setDcry("杨静志");
-                    break;
-                case "先锋村四社":
-                    tempXzjl.setDcry("刘少勇");
-                    break;
-                case "先锋村五社":
-                    tempXzjl.setDcry("吴文碧");
-                    break;
-                default:
-                    tempXzjl.setDcry("范清香");
-                    break;
+            if (dbXzjl!= null){
+                //这个时候再判断 有没有新增 记录有的话就更新 没有就不更新呗
+                //先计算社别
+                String tempSb = tempXzjl.getSb();
+                switch (tempSb) {
+                    case "先锋村一社":
+                        tempXzjl.setDcry("谢道福");
+                        break;
+                    case "先锋村二社":
+                        tempXzjl.setDcry("杨绍楚");
+                        break;
+                    case "先锋村三社":
+                        tempXzjl.setDcry("杨静志");
+                        break;
+                    case "先锋村四社":
+                        tempXzjl.setDcry("刘少勇");
+                        break;
+                    case "先锋村五社":
+                        tempXzjl.setDcry("吴文碧");
+                        break;
+                    default:
+                        tempXzjl.setDcry("范清香");
+                        break;
+                }
+                //更新
+                tempXzjl.setId(dbXzjl.getId());
+                xxtjMapper.updateOneXzjl(tempXzjl);
+                return true;
             }
-            //更新
-            tempXzjl.setId(dbXzjl.getId());
-            xxtjMapper.updateOneXzjl(tempXzjl);
-            return true;
+           return true;
         }
 
     }

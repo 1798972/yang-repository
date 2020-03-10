@@ -11,7 +11,7 @@ import java.util.List;
 public interface XXTJMapper {
     //根据身份证 查询一条新增记录
     @Select("select * from total where ysfz = #{sfz}")
-    Total findOneTotal(String sfz);
+    List<Total> findOneTotal(String sfz);
 
     //total表插入一个新身份证
     @Insert("insert into total (ysfz) values (#{sfz})")
