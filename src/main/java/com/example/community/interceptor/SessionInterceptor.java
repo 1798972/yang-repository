@@ -41,7 +41,8 @@ public class SessionInterceptor implements HandlerInterceptor {
                     if (user != null) {
                         //4.如果user存在 就在session中存入user
                         request.getSession().setAttribute("user", user);
-                        //在session中存入通知信息
+
+                        //在session中存入未读通知信息
                         Long unreadMessage = notificationService.unReadCount(user.getId());
                         request.getSession().setAttribute("unreadMessage",unreadMessage);
                     }

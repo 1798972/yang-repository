@@ -6,6 +6,7 @@ import com.example.community.mapper.UserMapper;
 import com.example.community.model.User;
 import com.example.community.provider.GitHubProvider;
 import com.example.community.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import java.util.UUID;
 
 
 //解析github用户
+@Slf4j
 @Controller
 public class AuthorizeController {
 
@@ -55,10 +57,9 @@ public class AuthorizeController {
         accessTokenDTO.setClient_secret(clientSecret);
         //得到用户的token
         String accessToken = gitHubProvider.getAccessToken(accessTokenDTO);
-//        System.out.println("用户token："+accessToken);
         //通过token得到用户
         GitHubUser gitHubUser = gitHubProvider.getUser(accessToken);
-//        System.out.println("github用户:"+gitHubUser);
+
         if (gitHubUser != null) {
             User user = new User();
             //token用于识别用户身份
@@ -77,7 +78,8 @@ public class AuthorizeController {
 
             return "redirect:/";
         } else {
-            System.out.println("登录失败！！");
+//            追加到日志中 lombok的@Slf4j注解
+           log.error("github login error,{}",gitHubUser);
             return "redirect:/";
         }
     }

@@ -16,14 +16,14 @@ function comment2Target(targetId,type,content) {
         }),
         dataType: "json",
         success: function (response) {
-            if (response.code == 200) {
+            if (response.code === 200) {
                 //隐藏回复框
                 // $("#comment_section").hide();
                 //页面刷新
                 window.location.reload();
             } else {
                 //用户未登录时 要先登录
-                if (response.code == 2003) {
+                if (response.code === 2003) {
                     var accepted = confirm(response.message);
                     //点击确认 跳转登录
                     if (accepted) {

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+
 @Component
 public class GitHubProvider {
     //1.得到用户token

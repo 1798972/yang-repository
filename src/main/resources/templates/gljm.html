@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>信息统计_管理界面</title>
+    <script src="/js/jquery-3.4.1.min.js" type="text/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <script src="/js/gljm.js" type="application/javascript"></script>
+    <script src="/laydate/laydate.js" type="application/javascript"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+
+</head>
+<body>
+<div class="col-lg-12">
+    <!--查询日期-->
+    <div class=" input-group-lg col-lg-4 col-xs-4">
+        <span class="input-group-addon">查询的日期</span>
+        <input id="input_cxrq" class="form-control" type="text" placeholder="将要查询的日期">
+        <script>
+            laydate.render({
+                elem: '#input_cxrq'
+                , format: 'MM月d日'
+                , min: -365
+                , max: 365
+            });
+        </script>
+    </div>
+    <!--今日日期-->
+    <div class="input-group-lg col-lg-4 col-xs-4">
+        <span class="input-group-addon">今日时间</span>
+        <script>
+            Date.prototype.format = function (fmt) {
+                var o = {
+                    "M+": this.getMonth() + 1, //月份
+                    "d+": this.getDate(), //日
+                    "h+": this.getHours(), //小时
+                    "m+": this.getMinutes(), //分
+                    "s+": this.getSeconds(), //秒
+                    "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                    "S": this.getMilliseconds() //毫秒
+                };
+                if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+                for (var k in o)
+                    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+                return fmt;
+            };
+            $(document).ready(function () {
+                var toady = new Date().format("MM月d日");
+                $("#jrsj").val(toady);
+            });
+        </script>
+        <input id="jrsj" class="form-control" style="text-align: center;" type="text" placeholder="" disabled>
+    </div>
+    <!--查询姓名-->
+    <div class=" input-group-lg col-lg-4 col-xs-4">
+        <span class="input-group-addon">查询的姓名</span>
+        <input id="input_srxm" class="form-control" type="text" placeholder="将要查询的姓名">
+    </div>
+</div>
+
+<!--功能选择-->
+<div class="col-lg-12">
+    <button type="button" class="btn btn-info col-xs-4" onclick="findWcByRq()">按日期查询外出</button>
+    <button id="findTodayAllWc" type="button" class="btn btn-primary col-xs-4" onclick="findTodayAllWc()">查询今日外出
+    </button>
+    <button type="button" class="btn btn-success col-xs-4" onclick="findWcByXm()">按姓名查询外出</button>
+
+</div>
+<!--显示部分-->
+<div class="col-lg-12" style="padding-top: 10px">
+    <button type="button" class="btn btn-info col-xs-4" onclick="findXzByRq()">按日期查询新增</button>
+    <button id="findTodayAllXz" type="button" class="btn btn-primary col-xs-4" onclick="findTodayAllXz()">查询今日新增
+    </button>
+    <button type="button" class="btn btn-success col-xs-4" onclick="findXzByXm()">按姓名查询新增</button>
+</div>
+<!--1.外出表-->
+<div id="tableDiv1" class="table-responsive col-lg-12" style="display: none">
+    <table id="table1" class="table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>姓名</th>
+            <th>性别</th>
+            <th>年龄</th>
+            <th>身份证号码</th>
+            <th>家庭地址</th>
+            <th>联系电话</th>
+            <th>外来地址与出发时间</th>
+            <th>原因</th>
+            <th>来旺时间</th>
+            <th>外出地址与出发时间</th>
+            <th>返乡方式</th>
+            <th>面访时间</th>
+        </tr>
+        </thead>
+        <tbody id="myTBody1">
+        </tbody>
+    </table>
+</div>
+<!--2.新增表-->
+<div id="tableDiv2" class="table-responsive col-lg-12" style="display: none">
+    <table id="table2" class="table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>姓名</th>
+            <th>性别</th>
+            <th>年龄</th>
+            <th>身份证号码</th>
+            <th>家庭地址</th>
+            <th>联系电话</th>
+            <th>外来地址与出发时间</th>
+            <th>原因</th>
+            <th>来旺时间</th>
+            <th>调查人员</th>
+            <th>家庭人数</th>
+            <th>返乡方式</th>
+            <th>面访时间</th>
+        </tr>
+        </thead>
+        <tbody id="myTBody2">
+        </tbody>
+    </table>
+</div>
+<br>
+<div id="info_div" class="alert alert-danger col-lg-12" role="alert" style="text-align: center;display: none">
+    <span style="color: red"><b>无记录!</b></span>
+</div>
+
+
+<!--导出excel-->
+<div class="col-lg-12 col-xs-12" style="margin-top: 50px;">
+<button type="button" class="btn btn-warning" onClick="method5(table1)">导出界面上的外出表</button>
+<button type="button" class="btn btn-danger" style="float: right" onClick="method5(table2)">导出界面上的新增表</button>
+</div>
+<script language="javascript">
+    //第五种方法
+    var idTmr;
+    function  getExplorer() {
+        var explorer = window.navigator.userAgent ;
+        //ie
+        if (explorer.indexOf("MSIE") >= 0) {
+            return 'ie';
+        }
+        //firefox
+        else if (explorer.indexOf("Firefox") >= 0) {
+            return 'Firefox';
+        }
+        //Chrome
+        else if(explorer.indexOf("Chrome") >= 0){
+            return 'Chrome';
+        }
+        //Opera
+        else if(explorer.indexOf("Opera") >= 0){
+            return 'Opera';
+        }
+        //Safari
+        else if(explorer.indexOf("Safari") >= 0){
+            return 'Safari';
+        }
+    }
+    function method5(tableid) {
+        if(getExplorer()==='ie')
+        {
+            var curTbl = document.getElementById(tableid);
+            var oXL = new ActiveXObject("Excel.Application");
+            var oWB = oXL.Workbooks.Add();
+            var xlsheet = oWB.Worksheets(1);
+            var sel = document.body.createTextRange();
+            sel.moveToElementText(curTbl);
+            sel.select();
+            sel.execCommand("Copy");
+            xlsheet.Paste();
+            oXL.Visible = true;
+
+            try {
+                var fname = oXL.Application.GetSaveAsFilename("Excel.xls", "Excel Spreadsheets (*.xls), *.xls");
+            } catch (e) {
+                print("Nested catch caught " + e);
+            } finally {
+                oWB.SaveAs(fname);
+                oWB.Close(savechanges = false);
+                oXL.Quit();
+                oXL = null;
+                idTmr = window.setInterval("Cleanup();", 1);
+            }
+
+        }
+        else
+        {
+            tableToExcel(tableid)
+        }
+    }
+    function Cleanup() {
+        window.clearInterval(idTmr);
+        CollectGarbage();
+    }
+    var tableToExcel = (function() {
+        var uri = 'data:application/vnd.ms-excel;base64,',
+            template = '<html><head><meta charset="UTF-8"></head><body><table>{table}</table></body></html>',
+            base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) },
+            format = function(s, c) {
+                return s.replace(/{(\w+)}/g,
+                    function(m, p) { return c[p]; }) }
+        return function(table, name) {
+            if (!table.nodeType) table = document.getElementById(table)
+            var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+            window.location.href = uri + base64(format(template, ctx))
+        }
+    })()
+</script>
+</body>
+</html>
