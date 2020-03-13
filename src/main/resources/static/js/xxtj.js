@@ -256,11 +256,14 @@ function checkAll() {
         var aPos = wcrq.indexOf('月');
         var bPos = wcrq.indexOf('日');
         var dt = wcrq.substr(aPos + 1, bPos - aPos - 1);
-        var d = dt -1 ;
+        //为当日 不减去1了
+        var d = dt;
         var a2Pos = wcrq.indexOf('年');
         var b2Pos = wcrq.indexOf('月');
         var m = wcrq.substr(a2Pos + 1, b2Pos - a2Pos - 1);
         var mfsj = m + '月'+ d +'日';
+        // 面访时间为外出时间
+        // var mfsj = wcrq;
         //提交操作
         $.ajax({
             url: "/xxtj/wcjl",
