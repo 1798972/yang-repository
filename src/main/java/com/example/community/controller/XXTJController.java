@@ -11,7 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -69,7 +71,10 @@ public class XXTJController {
             //调查人员需要计算
             tempXzjl.setJtrs(wcjlDTO.getJtrs());
             tempXzjl.setFxfs(wcjlDTO.getFxfs());
-            tempXzjl.setMfsj(wcjlDTO.getMfsj());
+            //新增记录的面访时间为今日
+            SimpleDateFormat df = new SimpleDateFormat("MM月dd日");//设置日期格式
+            String xzsj = df.format(new Date());
+            tempXzjl.setMfsj(xzsj);
             boolean xzFlag = xxtjService.insetOrUpdateOneXzjl(tempXzjl);
             if (wcFlag && xzFlag) {
                 return "success";
@@ -80,7 +85,7 @@ public class XXTJController {
             //没有外出记录 则需要新增
             boolean sfzflag = xxtjService.findSFZ(wcjlDTO.getSfz());
             if (sfzflag) {
-                //有记录 生成外出表即可
+                //总表有记录 生成外出表即可
                 Wcjl tempWcjl = new Wcjl();
                 tempWcjl.setXm(wcjlDTO.getXm());
                 tempWcjl.setXb(wcjlDTO.getXb());
@@ -116,7 +121,11 @@ public class XXTJController {
                 //调查人员需要计算
                 tempXzjl.setJtrs(wcjlDTO.getJtrs());
                 tempXzjl.setFxfs(wcjlDTO.getFxfs());
-                tempXzjl.setMfsj(wcjlDTO.getMfsj());
+                //新增记录的面访时间为今日
+                SimpleDateFormat df = new SimpleDateFormat("MM月dd日");//设置日期格式
+                String xzsj = df.format(new Date());
+                tempXzjl.setMfsj(xzsj);
+
                 boolean xzFlag = xxtjService.insetOrUpdateOneXzjl(tempXzjl);
                 //生成外出记录
                 Wcjl tempWcjl = new Wcjl();
