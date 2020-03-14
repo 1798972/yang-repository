@@ -40,6 +40,7 @@ public class XXTJController {
     public String oneXX(@ModelAttribute WcjlDTO wcjlDTO) {
         //得到一条提交信息 先判断有没有
         Wcjl dbWcjl = xxtjMapper.findOneWcjl(wcjlDTO.getSfz());
+
         if (dbWcjl != null) {
             //有外出记录 更新
             Wcjl tempWcjl = new Wcjl();
@@ -58,29 +59,36 @@ public class XXTJController {
             boolean wcFlag = xxtjService.insetOrUpdateOneWcjl(tempWcjl);
 
             //还有看看有没有新增记录需要更新
-            Xzjl tempXzjl = new Xzjl();
-            tempXzjl.setXm(wcjlDTO.getXm());
-            tempXzjl.setXb(wcjlDTO.getXb());
-            tempXzjl.setNl(wcjlDTO.getNl());
-            tempXzjl.setSfz(wcjlDTO.getSfz());
-            tempXzjl.setSb(wcjlDTO.getSb());
-            tempXzjl.setDhh(wcjlDTO.getDhh());
-            tempXzjl.setWldzAndFxrqAndFxsj(wcjlDTO.getWldz() + wcjlDTO.getFxrq() + wcjlDTO.getFxsj());
-            tempXzjl.setWcyy(wcjlDTO.getWcyy());
-            tempXzjl.setLwrqAndLwsj(wcjlDTO.getLwrq() + wcjlDTO.getLwsj());
-            //调查人员需要计算
-            tempXzjl.setJtrs(wcjlDTO.getJtrs());
-            tempXzjl.setFxfs(wcjlDTO.getFxfs());
-            //新增记录的面访时间为今日
-            SimpleDateFormat df = new SimpleDateFormat("MM月dd日");//设置日期格式
-            String xzsj = df.format(new Date());
-            tempXzjl.setMfsj(xzsj);
-            boolean xzFlag = xxtjService.insetOrUpdateOneXzjl(tempXzjl);
+            //2020年的才更新新增记录
+            String lwrq = wcjlDTO.getLwrq();
+            boolean xzFlag = true;
+            if (!lwrq.contains("2019年")){
+                Xzjl tempXzjl = new Xzjl();
+                tempXzjl.setXm(wcjlDTO.getXm());
+                tempXzjl.setXb(wcjlDTO.getXb());
+                tempXzjl.setNl(wcjlDTO.getNl());
+                tempXzjl.setSfz(wcjlDTO.getSfz());
+                tempXzjl.setSb(wcjlDTO.getSb());
+                tempXzjl.setDhh(wcjlDTO.getDhh());
+                tempXzjl.setWldzAndFxrqAndFxsj(wcjlDTO.getWldz() + wcjlDTO.getFxrq() + wcjlDTO.getFxsj());
+                tempXzjl.setWcyy(wcjlDTO.getWcyy());
+                tempXzjl.setLwrqAndLwsj(wcjlDTO.getLwrq() + wcjlDTO.getLwsj());
+                //调查人员需要计算
+                tempXzjl.setJtrs(wcjlDTO.getJtrs());
+                tempXzjl.setFxfs(wcjlDTO.getFxfs());
+                //新增记录的面访时间为今日
+                SimpleDateFormat df = new SimpleDateFormat("MM月dd日");//设置日期格式
+                String xzsj = df.format(new Date());
+                tempXzjl.setMfsj(xzsj);
+                 xzFlag = xxtjService.insetOrUpdateOneXzjl(tempXzjl);
+            }
+
             if (wcFlag && xzFlag) {
                 return "success";
             } else {
                 return "error";
             }
+
         } else {
             //没有外出记录 则需要新增
             boolean sfzflag = xxtjService.findSFZ(wcjlDTO.getSfz());
@@ -106,46 +114,73 @@ public class XXTJController {
                     return "error";
                 }
             } else {
+                //不是2019年的
                 //没有记录 要同时生成新增表和外出表
-                //生成新增记录
-                Xzjl tempXzjl = new Xzjl();
-                tempXzjl.setXm(wcjlDTO.getXm());
-                tempXzjl.setXb(wcjlDTO.getXb());
-                tempXzjl.setNl(wcjlDTO.getNl());
-                tempXzjl.setSfz(wcjlDTO.getSfz());
-                tempXzjl.setSb(wcjlDTO.getSb());
-                tempXzjl.setDhh(wcjlDTO.getDhh());
-                tempXzjl.setWldzAndFxrqAndFxsj(wcjlDTO.getWldz() + wcjlDTO.getFxrq() + wcjlDTO.getFxsj());
-                tempXzjl.setWcyy(wcjlDTO.getWcyy());
-                tempXzjl.setLwrqAndLwsj(wcjlDTO.getLwrq() + wcjlDTO.getLwsj());
-                //调查人员需要计算
-                tempXzjl.setJtrs(wcjlDTO.getJtrs());
-                tempXzjl.setFxfs(wcjlDTO.getFxfs());
-                //新增记录的面访时间为今日
-                SimpleDateFormat df = new SimpleDateFormat("MM月dd日");//设置日期格式
-                String xzsj = df.format(new Date());
-                tempXzjl.setMfsj(xzsj);
+                String lwrq = wcjlDTO.getLwrq();
+                if (!lwrq.contains("2019年")){
+                    //生成新增记录
+                    Xzjl tempXzjl = new Xzjl();
+                    tempXzjl.setXm(wcjlDTO.getXm());
+                    tempXzjl.setXb(wcjlDTO.getXb());
+                    tempXzjl.setNl(wcjlDTO.getNl());
+                    tempXzjl.setSfz(wcjlDTO.getSfz());
+                    tempXzjl.setSb(wcjlDTO.getSb());
+                    tempXzjl.setDhh(wcjlDTO.getDhh());
+                    tempXzjl.setWldzAndFxrqAndFxsj(wcjlDTO.getWldz() + wcjlDTO.getFxrq() + wcjlDTO.getFxsj());
+                    tempXzjl.setWcyy(wcjlDTO.getWcyy());
+                    tempXzjl.setLwrqAndLwsj(wcjlDTO.getLwrq() + wcjlDTO.getLwsj());
+                    //调查人员需要计算
+                    tempXzjl.setJtrs(wcjlDTO.getJtrs());
+                    tempXzjl.setFxfs(wcjlDTO.getFxfs());
+                    //新增记录的面访时间为今日
+                    SimpleDateFormat df = new SimpleDateFormat("MM月dd日");//设置日期格式
+                    String xzsj = df.format(new Date());
+                    tempXzjl.setMfsj(xzsj);
+                    boolean xzFlag = xxtjService.insetOrUpdateOneXzjl(tempXzjl);
 
-                boolean xzFlag = xxtjService.insetOrUpdateOneXzjl(tempXzjl);
-                //生成外出记录
-                Wcjl tempWcjl = new Wcjl();
-                tempWcjl.setXm(wcjlDTO.getXm());
-                tempWcjl.setXb(wcjlDTO.getXb());
-                tempWcjl.setNl(wcjlDTO.getNl());
-                tempWcjl.setSfz(wcjlDTO.getSfz());
-                tempWcjl.setSb(wcjlDTO.getSb());
-                tempWcjl.setDhh(wcjlDTO.getDhh());
-                tempWcjl.setWldzAndFxrqAndFxsj(wcjlDTO.getWldz() + wcjlDTO.getFxrq() + wcjlDTO.getFxsj());
-                tempWcjl.setWcyy(wcjlDTO.getWcyy());
-                tempWcjl.setLwrqAndLwsj(wcjlDTO.getLwrq() + wcjlDTO.getLwsj());
-                tempWcjl.setWcdzAndWcrqAndWcsj(wcjlDTO.getWcdz() + wcjlDTO.getWcrq() + wcjlDTO.getWcsj());
-                tempWcjl.setFxfs(wcjlDTO.getFxfs());
-                tempWcjl.setMfsj(wcjlDTO.getMfsj());
-                boolean wcFlag = xxtjService.insetOrUpdateOneWcjl(tempWcjl);
-                if (xzFlag && wcFlag) {
-                    return "success";
-                } else {
-                    return "error";
+                    //生成外出记录
+                    Wcjl tempWcjl = new Wcjl();
+                    tempWcjl.setXm(wcjlDTO.getXm());
+                    tempWcjl.setXb(wcjlDTO.getXb());
+                    tempWcjl.setNl(wcjlDTO.getNl());
+                    tempWcjl.setSfz(wcjlDTO.getSfz());
+                    tempWcjl.setSb(wcjlDTO.getSb());
+                    tempWcjl.setDhh(wcjlDTO.getDhh());
+                    tempWcjl.setWldzAndFxrqAndFxsj(wcjlDTO.getWldz() + wcjlDTO.getFxrq() + wcjlDTO.getFxsj());
+                    tempWcjl.setWcyy(wcjlDTO.getWcyy());
+                    tempWcjl.setLwrqAndLwsj(wcjlDTO.getLwrq() + wcjlDTO.getLwsj());
+                    tempWcjl.setWcdzAndWcrqAndWcsj(wcjlDTO.getWcdz() + wcjlDTO.getWcrq() + wcjlDTO.getWcsj());
+                    tempWcjl.setFxfs(wcjlDTO.getFxfs());
+                    tempWcjl.setMfsj(wcjlDTO.getMfsj());
+                    boolean wcFlag = xxtjService.insetOrUpdateOneWcjl(tempWcjl);
+
+                    if (xzFlag && wcFlag) {
+                        return "success";
+                    } else {
+                        return "error";
+                    }
+                }else {
+                    //是2019年的只生成外出记录
+                    Wcjl tempWcjl = new Wcjl();
+                    tempWcjl.setXm(wcjlDTO.getXm());
+                    tempWcjl.setXb(wcjlDTO.getXb());
+                    tempWcjl.setNl(wcjlDTO.getNl());
+                    tempWcjl.setSfz(wcjlDTO.getSfz());
+                    tempWcjl.setSb(wcjlDTO.getSb());
+                    tempWcjl.setDhh(wcjlDTO.getDhh());
+                    tempWcjl.setWldzAndFxrqAndFxsj(wcjlDTO.getWldz() + wcjlDTO.getFxrq() + wcjlDTO.getFxsj());
+                    tempWcjl.setWcyy(wcjlDTO.getWcyy());
+                    tempWcjl.setLwrqAndLwsj(wcjlDTO.getLwrq() + wcjlDTO.getLwsj());
+                    tempWcjl.setWcdzAndWcrqAndWcsj(wcjlDTO.getWcdz() + wcjlDTO.getWcrq() + wcjlDTO.getWcsj());
+                    tempWcjl.setFxfs(wcjlDTO.getFxfs());
+                    tempWcjl.setMfsj(wcjlDTO.getMfsj());
+                    boolean wcFlag = xxtjService.insetOrUpdateOneWcjl(tempWcjl);
+
+                    if (wcFlag) {
+                        return "success";
+                    } else {
+                        return "error";
+                    }
                 }
             }
         }
