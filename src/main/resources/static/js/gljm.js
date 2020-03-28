@@ -18,7 +18,7 @@ Date.prototype.format = function (fmt) {
 //查询今日外出
 function findTodayAllWc() {
     //存储的 03月6日 所以月要MM
-    var toady = new Date().format("MM月d日");
+    var toady = new Date().format("MM月dd日");
     $.ajax({
         url: "/gljm/findToadyAllWc",
         data: {

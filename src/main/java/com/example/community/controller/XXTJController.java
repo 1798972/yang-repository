@@ -90,8 +90,10 @@ public class XXTJController {
             }
 
         } else {
-            //没有外出记录 则需要新增
+            //没有外出记录 则需要新增外出记录
+            //查询总表有无身份证
             boolean sfzflag = xxtjService.findSFZ(wcjlDTO.getSfz());
+
             if (sfzflag) {
                 //总表有记录 生成外出表即可
                 Wcjl tempWcjl = new Wcjl();

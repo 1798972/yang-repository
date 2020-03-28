@@ -91,6 +91,7 @@ public class NotificationService {
         if(!notification.getReceiver().equals(user.getId())){
             throw new CustomizeException(CustomizeErrorCode.READ_NOTIFICATION_ERROR);
         }
+
         notification.setStatus(NotificationStatusEnums.READ.getStatus());
         notificationMapper.updateReadStatus(notification.getId());
         //读取
