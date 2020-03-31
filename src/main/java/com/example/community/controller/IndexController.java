@@ -15,17 +15,22 @@ public class IndexController {
     @Autowired
     private QuestionService questionService;
 
-    @GetMapping("/")
+/*    @GetMapping("/")
     public String index(Model model,
                         @RequestParam(name = "page", defaultValue = "1") Integer page,
                         @RequestParam(name = "size", defaultValue = "5") Integer size,
                         @RequestParam(name = "search", required = false) String search
-                        ) {
+    ) {
         //获取问题列表
         PageInfoDTO pageInfo = questionService.getQuestionDTOList(page, size, search);
         model.addAttribute("search",search);
         model.addAttribute("pageInfo", pageInfo);
 
         return "index";
+    }*/
+
+    @GetMapping("/")
+    public String index() {
+        return "yang";
     }
 }
